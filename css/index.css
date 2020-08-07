@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -5,7 +8,7 @@
 }
 
 body {
-	font-family: Roboto;
+	font-family: 'Roboto', sans-serif;
 	font-size: 30px;
 }
 
@@ -47,6 +50,11 @@ li{
 	margin-right: 20px;
 }
 
+li > a {
+	color: white;
+	text-decoration: none;
+}
+
 .menu img{
 	width: 94px;
 	height: 87px;
@@ -66,7 +74,7 @@ footer > p {
 	float: left;
 }
 
-footer > img {
+footer img {
 	margin: 15px;
 	width: 80px;
 	height: 80px;
@@ -83,22 +91,41 @@ footer > img {
 }
 
 #start-messaging-text {
+	font-family: 'Dancing Script', cursive;
 	text-align: center;
 }
 
 #opportunities > div > p {
-	font-family: Dancing Script;
+	font-family: 'Dancing Script', cursive;
 	font-size: 30px;
+	text-align: center;
 }
 
 #opportunities > div > img{
 	height: 150px;
 	width: 150px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#about {
+	position: relative;
 }
 
 #about > img {
 	width: 167px;
 	height: 215px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#quote {
+	font-family: 'Dancing Script', cursive;
+	text-align: center;
 }
 
 #about > p {
