@@ -12,4 +12,5 @@
     - Protected - visible to everyone but protected by password (set upon creation)
 -   Dark theme (automatic by browser media query and manual - in settings)
 -   Local or remote notification by browser's notification API
+
 [The link to view the layout of the site](https://www.figma.com/file/wRvtHfljokwk0MQXOYBdSl/Desktop-chat?node-id=44%3A0)
