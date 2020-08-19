@@ -59,6 +59,7 @@ input {
 	height: 53px;
 	width: 260px;
 	float: left;
+	font-size: 18px;
 }
 
 #sign-in-button {
