@@ -80,3 +80,20 @@ a {
 	font-size: 18px;
 	color: grey;
 }
+
+/* for mobiles */
+
+@media screen and (max-width: 767px) {
+	body {
+		background-image: url(/img/login-background-android.jpg);
+		display: flex;
+	}
+
+	input {
+		display: block;
+	}
+
+	.left-side-page img {
+		display: none;
+	}
+}
