@@ -61,6 +61,7 @@ input {
 	width: 260px;
 	float: left;
 	font-size: 18px;
+	text-align: center;
 }
 
 #sign-in-button {
@@ -73,6 +74,8 @@ input {
 
 #forgot-password-button{
 	vertical-align: middle;
+	display: block;
+	margin: auto;
 }
 
 a {
@@ -94,15 +97,13 @@ a {
 		height: 598px;
 	}
 
-	input #sign-in-button {
-		width: 50%;
-	}
-
 	.left-side-page > p > img{
 		width: 100%;
 		height: 598px;
 	}
 }
+
+/* ---------Mobile ------------------------*/
 
 @media screen and (max-width: 767px) {
 	body {
@@ -110,15 +111,14 @@ a {
 	}
 
 	input, #sign-in-button{
-		display: block;
-		margin: auto;
-		float: none;
-		width: 480px;
+		margin-left: 5%;
+		margin-right: 5%;
+		margin-top: 20px;
+		width: 90%;
 	}
 
 	.page-content {
 		text-align: center;
-		display: block;
 	}
 
 	.left-side-page{
@@ -127,8 +127,8 @@ a {
 
 	.right-side-page {	
 		margin: auto;
-		width: 520px;
-}
+		width: 100%;
+	}
 
 	.right-side-page > p > img {
 		width: 120px;
@@ -150,7 +150,7 @@ a {
 	a {
 		color: white;
 	}
-	
+
 	#chat-logo-image {
 		text-align: center;
 		margin-top: 10px;
