@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 
 * {
     box-sizing: border-box;
@@ -65,6 +66,7 @@ li > a {
 	color: #253b6c;
 	background-color: white;
 	text-decoration: none;
+	border: 2px solid black;
 	border-radius: 10px;
 	padding: 10px;
 }
@@ -111,7 +113,8 @@ hr {
 }
 
 .about {
-	position: relative;
+	width: 100%;
+	margin: auto;
 }
 
 .about > img {
@@ -124,13 +127,19 @@ hr {
 	margin-bottom: 20px;
 }
 
+.about > p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	text-align: right;
+	margin-top: 20px;
+	margin-right: 20%;
+}
+
 #quote {
 	font-family: 'Caveat', cursive;
 	text-align: center;
-}
-
-.about > p {
-	text-align: center;
+	font-size: 32px;
+	margin: 0;
 }
 
 footer {
@@ -138,6 +147,7 @@ footer {
 	height: 110px;
 	position: relative;
 	line-height: 110px;
+	margin-top: 15px;
 }
 
 footer > p {
@@ -165,6 +175,12 @@ footer img {
 		text-align: center;
 	}
 
+	.chat-symbols > img{
+		width: 50px;
+		height: 50px;
+		display: block;
+	}
+
 	h1 {
 		font-size: calc(24px + (32 - 24) * ( (100vw - 480px) / ( 1024 - 480) ));
 		margin-top: 5px;
@@ -187,12 +203,6 @@ footer img {
 		font-size: 60%;
 		float: none;
 		
-	}
-
-	.menu > img{
-		width: 50px;
-		height: 50px;
-		display: block;
 	}
 
 	.opportunities {
