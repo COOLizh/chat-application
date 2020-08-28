@@ -133,6 +133,10 @@ a {
 
 	.page-content {
 		text-align: center;
+		top: 20px;
+		left: 8%;
+		height: 90%;
+		width: 85%;
 	}
 
 	.left-side-page{
@@ -153,10 +157,6 @@ a {
 		text-align: center;
 		vertical-align: middle;
 		font-size: 34px;
-	}
-
-	a {
-		color: white;
 	}
 
 	#chat-logo-image {
