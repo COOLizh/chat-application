@@ -9,12 +9,21 @@
 body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 30px;
+	background-color: #253b6c;
 }
 
 .page-content {
 	display: grid;
+	position: absolute;
 	grid-template-columns: repeat(2, auto);
-    grid-template-rows: repeat(1, auto);
+	grid-template-rows: repeat(1, auto);
+	top: 50px;
+	left: 20%;
+	width: 60%;
+	height: 798px;
+	border-radius: 20px;
+	padding: 20px;
+	background-color: white;
 }
 
 
@@ -22,12 +31,21 @@ body {
 
 /* Properties for left side of page */
 
+.left-side-page {
+	height: 40%;
+	width: 100%;
+}
 
 .left-side-page > p {
 	float: right;
 	text-align: center;
-	margin-top: 50px;
 	margin-right: 25px;
+}
+
+.left-side-page > p > img {
+	border-radius: 20px;
+	width: 100%;
+	height: 758px;
 }
 
 /* Properties for right side of page */
@@ -35,7 +53,7 @@ body {
 .right-side-page {	
 	margin-left: 25px;
 	padding: 15% 0px;
-	width: 520px;
+	width: 90%;
 }
 
 .right-side-page > p > img {
@@ -58,7 +76,7 @@ body {
 input {
 	margin-top: 20px;
 	height: 53px;
-	width: 260px;
+	width: 50%;
 	float: left;
 	font-size: 18px;
 	text-align: center;
@@ -69,7 +87,7 @@ input {
 	display: block;
 	background-color:  black;
 	color:  white;
-	width: 520px;
+	width: 100%;
 }
 
 #forgot-password-button{
@@ -86,28 +104,25 @@ a {
 
 /* ---------Laptop ------------------------*/
 
-@media screen and (min-width: 768px) and (max-width: 1046px) {
-	.left-side-page > p {
-		float: right;
-		text-align: center;
-		margin-top: 50px;
-		margin-right: 25px;
-		width: 256px;
-		height: 598px;
+@media screen and (min-width: 768px) and (max-width: 1400px) {
+	.left-side-page {
+		display: none;
 	}
 
-	.left-side-page > p > img{
+	.right-side-page {
+		margin: auto;
+		padding: 0;
 		width: 100%;
-		height: 598px;
+	}
+	
+	.page-content {
+		grid-template-columns: repeat(1, auto);
 	}
 }
 
 /* ---------Mobile ------------------------*/
 
 @media screen and (max-width: 767px) {
-	body {
-		background-image: url(/img/login-background-android.jpg);
-	}
 
 	input, #sign-in-button{
 		margin-left: 5%;
@@ -138,12 +153,6 @@ a {
 		text-align: center;
 		vertical-align: middle;
 		font-size: 34px;
-		color: white;
-	}
-
-	#sign-in-button {
-		background-color:  white;
-		color:  black;
 	}
 
 	a {
@@ -153,6 +162,6 @@ a {
 	#chat-logo-image {
 		text-align: center;
 		margin-top: 10px;
-		margin-right: 55px;
+		margin-left: 45px;
 	}
 }
