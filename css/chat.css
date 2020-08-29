@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+img {
+    height: 50px;
+    width: 50px;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 30px;
+}
+
+/* whole page */
+
+.page-content {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+}
+
+/* left side of page */
+
+.settings-chats-section{
+    width: 100%;
+}
+
+.settings-chats-section > button, .settings-chats-section > input {
+    height: 117px;
+}
+
+.settings-chats-section > button {
+    width: 30%;
+}
+
+.settings-chats-section > input {
+    width: 60%;
+}
+
+.chats {
+    height: 100%;
+}
+
+#temp-chat {
+    padding: 20px;
+}
+
+#temp-chat > img{
+    width: 97px;
+    height: 88px;
+}
+
+/* middle side of page */
+
+.chat-info {
+    padding: 20px;
+    height: 117px;
+}
+
+.chat-info > img {
+    width: 97px;
+    height: 88px;
+    margin-left: 20%;
+}
+
+#chat-name {
+    display: inline;
+    vertical-align: middle;
+}
