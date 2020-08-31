@@ -34,29 +34,96 @@ body {
     width: 100%;
 }
 
-.settings-chats-section > button, .settings-chats-section > input {
-    height: 117px;
+.search-and-settings {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 5vh;
+    border: 2px solid #000000;
+    border-right: none;
 }
 
-.settings-chats-section > button {
-    width: 30%;
+.search-and-settings  > button {
+    font-size: 18px;
+    border-right: 2px solid black;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
 }
 
-.settings-chats-section > input {
-    width: 60%;
+.search-and-settings  > input {
+    font-size: 18px;
+    padding: 5px;
 }
 
 .chats {
-    height: 100%;
+    height: 95%;
+    overflow: scroll;
+    overflow-x:hidden;
+    border: 2px solid black;
+    border-top: none;
+    border-right: none;
 }
 
-#temp-chat {
+
+/* selected chat */
+
+#temp-selected-chat {
+    position: relative;
     padding: 20px;
+    border: 2px solid black;
+    border-top: none;
+    border-right: none;
+    background-color: #346ABC;
 }
 
-#temp-chat > img{
+#temp-selected-chat > img{
+    position: absolute;
+    top: 0px;
+    left: 5%;
     width: 97px;
     height: 88px;
+}
+
+#temp-chat-name {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 5px;
+    color: white;
+}
+
+#temp-last-message {
+    font-size: 18px;
+    text-align: center;
+    color: white;
+}
+
+/* other chats */
+
+.chat {
+    position: relative;
+    padding: 20px;
+    border: 2px solid black;
+    border-top: none;
+    border-right: none;
+}
+
+.chat > img{
+    position: absolute;
+    top: 0px;
+    left: 5%;
+    width: 97px;
+    height: 88px;
+}
+
+.temp-chat-name {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.temp-last-message {
+    font-size: 18px;
+    text-align: center;
 }
 
 /* middle side of page */ 
@@ -116,6 +183,8 @@ body {
     border: 3px solid #000000;
     border-top: none;
     background-color: #346ABC;
+    overflow: scroll;
+    overflow-x:hidden;
 }
 
 .temp-login-user-message {
@@ -199,6 +268,7 @@ body {
     padding: 10px;
 }
 
+/* right side of page */
 .stickers-section {
     border: 3px solid #000000;
     border-left: none;
