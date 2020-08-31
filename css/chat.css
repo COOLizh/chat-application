@@ -304,3 +304,36 @@ body {
     grid-column-end: 2;
     width: 100%;
 }
+
+/*-------------- mobiles ---------------*/
+
+@media screen and (max-width: 767px) {
+
+    /* whole page */
+    .page-content {
+        display: grid;
+        height: 100%;
+        grid-template-columns: repeat(1, auto);
+        grid-template-rows: repeat(1, auto);
+    }
+
+    .chats{
+        border-right: 2px solid black;
+    }
+
+    .search-and-settings {
+        border: 2px solid black;
+    }
+
+    .correspondence-section, .stickers-section {
+        display: none;
+    }
+
+    .temp-chat-name, .temp-last-message, #temp-chat-name, #temp-last-message {
+        margin-left: 20%;
+    }
+
+    .chat, #temp-selected-chat {
+        border-left: none;
+    }
+}
