@@ -167,6 +167,10 @@ footer img {
 /* ---------Mobile ------------------------*/
 
 @media screen and (max-width: 767px) {
+	#temp-chat-link {
+        display: none;
+    }
+
 	.menu {
 		background-color: #253b6c;
 		width: 100%;
