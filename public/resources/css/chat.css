@@ -290,6 +290,9 @@ body {
     border-left: none;
     padding-bottom: 8.6%;
     border-top: 3px solid #000000;
+    border-bottom: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .stickers > img {
@@ -299,10 +302,8 @@ body {
     height: 130px;
 }
 
-#last-sricker {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    width: 100%;
+#last-sticker {
+    height: 120px;
 }
 
 /*-------------- mobiles ---------------*/
