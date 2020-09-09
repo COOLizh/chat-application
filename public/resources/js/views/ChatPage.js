@@ -119,6 +119,8 @@ let ChatPage = {
         document.getElementById("css-tag").href = "resources/css/chat.css";
         document.title = "CoolChat messaging";
 
+        //testing git
+
         //when user press enter, message will be send
         window.addEventListener ("keypress", function (e) {
             if (e.keyCode !== 13) return;
