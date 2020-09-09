@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 30px;
+}
+
+.menu {
+	width: 100%;
+	height: 524px;
+	background-image: url(../img/chatting-people.jpg);
+	border-radius: 0 0 30px 30px;
+}
+
+.chat-symbols {
+	position: absolute;
+	top: 242px;
+	left: 43%;
+}
+
+.chat-symbols > img {
+	display: block;
+	margin: auto;
+	width: 94px;
+	height: 87px;
+}
+
+h1 {
+	font-size: 48px;
+	color: white;
+	margin-top: 10px;
+	text-align: center;
+	-webkit-text-stroke-width: 2px;
+  	-webkit-text-stroke-color: black;
+}
+
+
+.info-buttons {
+	float: left;
+}
+
+.login-buttons {
+	float: right;	
+}
+
+.info-buttons, .login-buttons {
+	margin: 7px;
+	padding: 20px;
+}
+
+li{
+	display: inline;
+	margin-right: 20px;
+}
+
+li > a {
+	color: #253b6c;
+	background-color: white;
+	text-decoration: none;
+	border: 2px solid black;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.opportunities {
+	padding: 40px;
+	display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, auto);
+    grid-column-gap: 70px;
+    grid-row-gap: 70px;
+}
+
+#start-messaging-text {
+	font-family: 'Dancing Script', cursive;
+	text-align: center;
+}
+
+.opportunities > div > p {
+	font-family: 'Dancing Script', cursive;
+	font-size: 30px;
+	text-align: center;
+}
+
+.opportunities > div > img{
+	height: 150px;
+	width: 150px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+hr {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-left: 100px;
+	margin-right: 100px;
+	padding: 0px;
+	height: 10px;
+	border: none;
+	color: #253b6c;
+	background-image: linear-gradient(90deg, #253b6c, #253b6c 33.33%, transparent 33.33%, transparent 100%);
+	background-size: 3px 100%;
+}
+
+.about {
+	width: 100%;
+	margin: auto;
+}
+
+.about > img {
+	width: 167px;
+	height: 215px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.about > p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	text-align: right;
+	margin-top: 20px;
+	margin-right: 20%;
+}
+
+#quote {
+	font-family: 'Caveat', cursive;
+	text-align: center;
+	font-size: 32px;
+	margin: 0;
+}
+
+footer {
+	background-color: #253b6c;
+	height: 110px;
+	position: relative;
+	line-height: 110px;
+	margin-top: 15px;
+}
+
+footer > p {
+	margin-left: 15px;
+	vertical-align: middle;
+	color: white;
+	float: left;
+}
+
+footer img {
+	margin: 15px;
+	width: 80px;
+	height: 80px;
+	float: right;
+}
+
+/* ---------Mobile ------------------------*/
+
+@media screen and (max-width: 767px) {
+	#temp-chat-link {
+        display: none;
+    }
+
+	.menu {
+		background-color: #253b6c;
+		width: 100%;
+		height: 150px;
+		background-image: none;
+		text-align: center;
+	}
+
+	.chat-symbols {
+		position: inherit;
+		top: 60px;
+		left: 45%;
+	}
+
+	.chat-symbols > img{
+		width: 50px;
+		height: 50px;
+		display: block;
+	}
+
+	h1 {
+		font-size: calc(24px + (32 - 24) * ( (100vw - 480px) / ( 1024 - 480) ));
+		margin-top: 5px;
+	}
+
+	.about{
+		margin: auto;
+	}
+
+	li {
+		margin-right: 10%;
+		margin-left: 10%;
+	}
+
+	li > a {
+		color: #253b6c;
+		background-color: white;
+		text-decoration: none;
+		border: 2px solid black;
+		border-radius: 10px;
+		padding: 10px;
+	}
+
+	.info-buttons {
+		display: none;
+	}
+
+	.login-buttons {
+		margin: auto;
+		font-size: 60%;
+		float: none;
+	}
+
+	.opportunities {
+		grid-template-columns: repeat(1, auto);
+    	grid-template-rows: repeat(4, auto);
+	}
+
+	.opportunities > div > p {
+		font-size: 24px;
+	}
+
+	hr {
+		margin-left: 50px;
+		margin-right: 50px;
+	}
+
+	footer {
+		background-color: #253b6c;
+		height: 110px;
+		position: relative;
+		line-height: 110px;
+		margin-top: 15px;
+	}
+	
+	footer > p {
+		font-size: 18px;
+	}
+	
+	footer img {
+		display: block;
+		margin: 30px 0 10px 10px;
+		width: 40px;
+		height: 40px;
+	}
+}

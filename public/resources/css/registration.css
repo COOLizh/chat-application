@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 40px;
+    text-align: center;
+	overflow-y: auto;
+	background-image: url(../img/registration-background.jpg);
+}
+
+.page-content {
+	position: absolute;
+	background-color: white;
+	top: 50px;
+	left: 30%;
+	width: 40%;
+	height: 800px;
+	border-radius: 20px;
+}
+
+p {
+	margin-top: 30px;
+}
+
+p + p {
+	margin-top: 5px;
+}
+
+input {
+	display: block;
+	margin: auto;
+	margin-top: 3%; /*AGL support percentage*/
+	height: 53px;
+	width: 80%;
+	font-size: 18px;
+	text-align: center;
+}
+
+#registration-button {
+	background-color:  black;
+	color:  white;
+}
+
+#chat-logo-image > img {
+	height: 134px;
+	width: 142px;
+}
+
+/* ---------Mobile ------------------------*/
+
+@media screen and (max-width: 767px) {
+	.page-content {
+		top: 10px;
+		left: 10%;
+		width: 80%;
+		height: 95%;
+		border-radius: 20px;
+	}
+
+	p {
+		margin-top: 20px;
+		margin-bottom: 10px;
+		font-size: 24px;
+	}
+	
+	p + p {
+		margin-top: 5px;
+	}
+
+	input {
+		height: 45px;
+		font-size: 15px;
+	}
+
+	#chat-logo-image > img {
+		height: 84px;
+		width: 92px;
+	}
+}
