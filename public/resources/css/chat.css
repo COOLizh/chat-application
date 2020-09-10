@@ -176,34 +176,41 @@ body {
     margin-left: 20%;
 }
 
-.correspondence{
-    position: relative;
-    width: 100%;
+.container {
     height: 80vh;
+    width: 100%;
     border: 3px solid #000000;
     border-top: none;
     background-color: #346ABC;
-    overflow: scroll;
-    overflow-x:hidden;
+    overflow-y: scroll;
+}
+
+.correspondence {
+    position: relative;
+    height: 100%;
 }
 
 .temp-login-user-message {
     position: absolute;
-    bottom: 200px;
+    bottom: 100px;
     right: 0;
     width: 100%;
+    overflow: hidden;
 }
 
-.temp-login-user-message > p {
+.temp-login-user-message > span {
     float: right;
-    width: 40%;
     text-align: center;
     background-color: #24BC21;
     padding: 15px;
     border-radius: 25px;
 }
 
-#message-status {
+.temp-login-user-message > p {
+    background-color: #346ABC;
+}
+
+.message-status {
     float: right;
     width: 20px;
     text-align: center;
@@ -216,7 +223,7 @@ body {
     text-align: center;
 }
 
-.temp-login-user-message > img {
+.temp-login-user-message>img {
     display: block;
     float: right;
     margin-right: 20px;
@@ -227,11 +234,12 @@ body {
 
 .temp-other-users-message {
     position: absolute;
-    bottom: 80px;
+    bottom: 0px;
     width: 100%;
+    overflow: hidden;
 }
-
-.temp-other-users-message > p {
+  
+  .temp-other-users-message>p {
     float: left;
     margin-left: 20px;
     width: 40%;
@@ -240,8 +248,8 @@ body {
     padding: 15px;
     border-radius: 25px;
 }
-
-.temp-other-users-message > img {
+  
+  .temp-other-users-message>img {
     display: block;
     float: left;
     margin-left: 20px;

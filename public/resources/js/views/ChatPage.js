@@ -79,17 +79,10 @@ let ChatPage = {
                 <p id="kind-of-chat">public</p>
                 <p id="users-count">204 567 members</p>   
             </section>
-            <div class="correspondence">
-                <section id="temp-login-user-message" class="temp-login-user-message">
-                    <img src="resources/img/unknown_male.png" alt="user-photo" id="user-photo">
-                    <p id="user-message">Some text</p>
-                    <p id="message-status">✓✓</p>
-                </section>
-                <section class="temp-other-users-message">
-                    <img src="resources/img/unknown_female.png" alt="user-photo" id="user-photo">
-                    <p id="my-message">Agree! =)</p>
-                </section>
-                <p id="user-typing-indicator">LastUser is typing....</p>
+            <div class="container">
+                <div class="correspondence">
+
+                </div>
             </div>
             <section class="text-area">
                 <input type="text" name="message" id="message" placeholder="Enter message...">
@@ -119,27 +112,26 @@ let ChatPage = {
         document.getElementById("css-tag").href = "resources/css/chat.css";
         document.title = "CoolChat messaging";
 
-        //testing git
-
         //when user press enter, message will be send
         window.addEventListener ("keypress", function (e) {
             if (e.keyCode !== 13) return;
-            let message = document.getElementById("message").value;
-            let correspondence = document.querySelector('.correspondence');
-            let userMessages = document.getElementsByClassName("temp-login-user-message");
-            console.log(userMessages);
-            for (const elem of userMessages) {
-                var stringValOfBottom = getComputedStyle(elem).bottom;
-                console.log(stringValOfBottom);
-                var intValOfBottom = parseInt(stringValOfBottom, 10);
-                intValOfBottom += 120;
-                elem.style.bottom = intValOfBottom.toString() + "px";
-            }
-            correspondence.innerHTML += `<section class="temp-login-user-message" id="login-user-last-message" style="display: absolute; bottom: 0;">
-            <img src="resources/img/unknown_male.png" alt="user-photo" id="user-photo">
-            <p id="user-message">${message}</p>
-            <p id="message-status">✓✓</p>
-        </section>`
+            const [container, block, messageArea] = [...document.querySelectorAll(".container, .correspondence, #message")];
+            let message = messageArea.value;
+            message = message.trim();
+            if(message == "") return;
+            const section = document.createElement("section");
+            section.classList.add("temp-login-user-message");
+            section.innerHTML = `
+                <img src="resources/img/unknown_male.png" alt="user-photo" class="user-photo">
+                <span class="user-message">${message}</span>
+                <p class="message-status">✓✓</p>
+            `;
+            block.appendChild(section);
+            [...block.children].reverse().forEach((child, index) => child.style.bottom = (index * 150) + "px");
+            block.style.height = (block.children.length * 150) + "px";
+            container.scrollTop += 150;
+            messageArea.value = "";
+            
         });
 
     }
