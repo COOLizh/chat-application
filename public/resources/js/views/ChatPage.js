@@ -1,4 +1,4 @@
-//import DB from "../services/db.js"
+import DB from "../services/db.js"
 
 // SPA
 let ChatPage = {
@@ -112,13 +112,25 @@ let ChatPage = {
         document.getElementById("css-tag").href = "resources/css/chat.css";
         document.title = "CoolChat messaging";
 
+        //get current user id for loading data and etc.
+        console.log(firebase.auth().currentUser.uid)
+
+        //create temp chat
+        const database = new DB();
+        database.createChat(firebase.auth().currentUser.uid);
+
+        // database.addUserToChat(firebase.auth().currentUser.uid)
+
         //when user press enter, message will be send
         window.addEventListener ("keypress", function (e) {
             if (e.keyCode !== 13) return;
             const [container, block, messageArea] = [...document.querySelectorAll(".container, .correspondence, #message")];
             let message = messageArea.value;
             message = message.trim();
-            if(message == "") return;
+            if(message == ""){
+                messageArea.value = "";
+                return;
+            }
             const section = document.createElement("section");
             section.classList.add("temp-login-user-message");
             section.innerHTML = `

@@ -32,7 +32,7 @@ let RegistrationPage = {
                 alert("Passsword != confirm password");
             } else {
                 let database = new DB();
-                database.registrateUser(name, surname, username, email, password);
+                database.createUser(name, surname, username, email, password);
                 alert("Succesfully registered")
             }
         }) 

@@ -199,6 +199,7 @@ body {
 }
 
 .temp-login-user-message > span {
+    display: block;
     float: right;
     text-align: center;
     background-color: #24BC21;

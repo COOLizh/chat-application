@@ -7,18 +7,8 @@ export class DB {
         this.auth = firebase.auth();
     }
 
-    async registrateUser(name, surname, username, email, password) {
-        this.db.ref("/users").push({
-            name: name,
-            surname: surname,
-            username: username,
-            chats: [],
-        });
-        this.auth.createUserWithEmailAndPassword(email, password)
-    }
-
     async loginUser(email, password){
-        this.auth.signInWithEmailAndPassword(email, password)
+        await this.auth.signInWithEmailAndPassword(email, password)
             .then((res) => {
                 Router._instance.navigate("/chat");
             })
@@ -26,6 +16,82 @@ export class DB {
                 alert(err);
             })
     }
+
+    async createUser(name, surname, username, email, password) {    
+        const key = await this.auth.createUserWithEmailAndPassword(email, password)
+            .then(function () {
+                return firebase.auth().currentUser.uid
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+        console.log("herer")
+        this.db.ref("/users/" + key).set({
+            name: name,
+            surname: surname,
+            username: username,
+            photoLink: "resources/img/unknown_user.png",
+            chats: []
+        });
+    }
+
+    async createChat(userId) {
+        const newChatId = await this.db.ref("/chats").push({
+            chatName: "temp chat",
+            membersCount: 1,
+        }).then(res => {
+            console.log(res.key)
+            console.log(res.getKey())
+            return res.key
+        });
+        await this.addUserToChat(userId, newChatId);
+    }
+
+    async getUserChats(userId) {
+        const snapshot = await this.db.ref("/users/" + userId + "/chats").once("value");
+        if (snapshot.exists()) {
+            return snapshot.val();
+        } else {
+            return null;
+        }
+    }
+
+    async addUserToChat(userId, chatId) {
+        let chats = await this.getUserChats(userId);
+        if(chats == null) {
+            chats = [];
+        }
+        chats.push(chatId);
+        this.db.ref("/users/" + userId + "/chats").set(chats);
+    }
+
+    async getChatMessages(chatId) {
+        const snapshot = await this.db.ref("/chats/" + chatId + "/messages").once("value")
+        if (snapshot.exists()){
+            return snapshot.val()
+        } else {
+            return null;
+        }
+    }
+
+    // const snapshot = await firebase.database().ref().once("value")
+    // firebase.database().ref().push(data)
+    // firebase.database().ref().push(data).then(res => {
+    //     //do smth
+    // })
+
+    async setChatMessage(userId, chatId, messageText) {
+        let messages = await this.getChatMessages(chatId);
+        if (messages == null) {
+            messages = [];
+        }
+        messages.push([userId, messageText]);
+    }
+
+
+    /* firebase.database().ref("/chats/" + chatId + "/messages").on("child_added", (snapshot) => {
+            
+        }) */
 }
 
 export default DB
