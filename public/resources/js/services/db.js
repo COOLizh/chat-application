@@ -90,13 +90,12 @@ export class DB {
         if (messages == null) {
             messages = [];
         }
-        messages.push([userId, messageText]);
+        messages.push({
+            userId: userId, 
+            messageText: messageText
+        });
+        firebase.database().ref("/chats/" + chatId + "/messages").set(messages)
     }
-
-
-    /* firebase.database().ref("/chats/" + chatId + "/messages").on("child_added", (snapshot) => {
-            
-        }) */
 }
 
 export default DB

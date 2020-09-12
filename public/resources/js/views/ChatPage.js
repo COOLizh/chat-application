@@ -63,7 +63,10 @@ let ChatPage = {
         for(const elem of userChats){
             const section = document.createElement("section");
             section.classList.add("chat");
-            section.innerHTML = `<p class="temp-chat-name">${elem.chatName}</p>
+            section.setAttribute.disabled = true
+            section.innerHTML = `
+            <input type="hidden" id="chat-id" value="${elem.chatId}">
+            <p class="temp-chat-name">${elem.chatName}</p>
             <p class="temp-last-message">LastUser: message</p>
             <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
             container.appendChild(section);
@@ -82,6 +85,7 @@ let ChatPage = {
                 messageArea.value = "";
                 return;
             }
+            database.setChatMessage(userId, document.getElementById("chat-id").value, message);
             const section = document.createElement("section");
             section.classList.add("temp-login-user-message");
             section.innerHTML = `
