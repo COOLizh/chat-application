@@ -10,15 +10,13 @@ let ChatPage = {
                 <input type="text" name="search" placeholder="Search...">
             </div>  
             <div class="chats">
-            
+
             </div>
         </div>
         <div class="correspondence-section">
-            <section class="chat-info">
-                <p id="chat-name">ChatName</p>
-                <img src="resources/img/unknown_user.png" alt="chat-photo">
-                <p id="kind-of-chat">public</p>
-                <p id="users-count">204 567 members</p>   
+            <section id="chat-info">
+                  <h2>CoolChat</h2>
+                  <img src="resources/img/chat-logo.jpg" alt="CoolChat logo">
             </section>
             <div class="container">
                 <div class="correspondence">
@@ -26,7 +24,7 @@ let ChatPage = {
                 </div>
             </div>
             <section class="text-area">
-                <input type="text" name="message" id="message" placeholder="Enter message...">
+                <input type="text" name="message" id="message" placeholder="Enter message..." disabled>
             </section>
         </div>
         <div class="stickers-section">
@@ -49,12 +47,16 @@ let ChatPage = {
         return view
     },
     after_render: async () => {
-        //cahnging title and css
+
+        //changing title and css
         document.getElementById("css-tag").href = "resources/css/chat.css";
         document.title = "CoolChat messaging";
 
         //get current user id for loading data and etc.
         const userId = firebase.auth().currentUser.uid;
+
+        //cariable for current chat id
+        let currentChatId = "";
 
         //check user chats and display information at chat page
         const database = new DB();
@@ -65,15 +67,52 @@ let ChatPage = {
             section.classList.add("chat");
             section.setAttribute.disabled = true
             section.innerHTML = `
-            <input type="hidden" id="chat-id" value="${elem.chatId}">
+            <input type="hidden" name="chat-id" value="${elem.chatId}">
             <p class="temp-chat-name">${elem.chatName}</p>
             <p class="temp-last-message">LastUser: message</p>
             <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
             container.appendChild(section);
         }
 
+        //adding event listeners to chat list
+        var chatList = document.querySelectorAll(".chat");
+        for(let i = 0; i < chatList.length; i++){
+            chatList[i].addEventListener('click', async (event) => {
+                event.preventDefault();
+                //changing current chat id
+                currentChatId = chatList[i].childNodes[1].value;
 
-        // database.addUserToChat(firebase.auth().currentUser.uid)
+                //making text message is abled
+                document.getElementById("message").disabled = false;
+
+                //changing information about chat
+                let chatInfo = await database.getChatInfo(currentChatId);
+
+                const sectionParent = document.getElementById("chat-info");
+                let chatNameP = document.createElement("p");
+                chatNameP.id = "chat-name";
+                chatNameP.innerText = chatInfo.chatName;
+                let chatImg = document.createElement("img");
+                chatImg.src = "resources/img/unknown_user.png";
+                chatImg.alt = "chat-photo";
+                let kindOfChatP = document.createElement("p");
+                kindOfChatP.id = "kind-of-chat";
+                kindOfChatP.innerText = "public";
+                let membersP = document.createElement("p");
+                membersP.id = "users-count";
+                membersP.innerText = chatInfo.membersCount + " members";
+                sectionParent.innerHTML = '';
+                sectionParent.append(chatNameP);
+                sectionParent.append(chatImg);
+                sectionParent.append(kindOfChatP);
+                sectionParent.append(membersP);
+
+                /*<p id="chat-name">ChatName</p>
+                <img src="resources/img/unknown_user.png" alt="chat-photo">
+                <p id="kind-of-chat">public</p>
+                <p id="users-count">204 567 members</p>  */
+            });
+        }
 
         //when user press enter, message will be send
         window.addEventListener ("keypress", function (e) {

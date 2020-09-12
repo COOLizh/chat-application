@@ -135,7 +135,7 @@ body {
 }
 
 /* middle side of page */ 
-.chat-info {
+#chat-info {
     display: grid;
     position: relative;
     align-items: center;
@@ -152,7 +152,7 @@ body {
     border: 3px solid #000000;
 }
  
-.chat-info > img {
+#chat-info > img {
     display: block;
  
     width: 97px;

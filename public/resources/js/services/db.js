@@ -96,6 +96,15 @@ export class DB {
         });
         firebase.database().ref("/chats/" + chatId + "/messages").set(messages)
     }
+
+    async getChatInfo(chatId){
+        const snapshot = await firebase.database().ref("/chats/" + chatId + "/").once("value");
+        if (snapshot.exists()) {
+            return snapshot.val();
+        } else {
+            return null;
+        }
+    }
 }
 
 export default DB
