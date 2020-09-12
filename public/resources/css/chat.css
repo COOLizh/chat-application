@@ -64,6 +64,13 @@ body {
     border-right: none;
 }
 
+#zero-chats-message{
+    margin-top: 80%;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+}
+
 
 /* selected chat */
 
@@ -151,6 +158,18 @@ body {
  
     border: 3px solid #000000;
 }
+
+#chat-info #chat-logo{
+    position: absolute;
+    top: 50%;
+    left: 25%;
+}
+
+#chat-info h2 {
+    position: absolute;
+    top: 20%;
+    left: 40%;
+}
  
 #chat-info > img {
     display: block;
@@ -191,6 +210,7 @@ body {
     border-top: none;
     background-color: #346ABC;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .correspondence {
@@ -198,10 +218,15 @@ body {
     height: 100%;
 }
 
-.temp-login-user-message {
+#start-correspondence-text {
     position: absolute;
-    bottom: 100px;
-    right: 0;
+    top: 50%;
+    left: 27%;
+    color: white;
+}
+
+.temp-login-user-message {
+    margin: 20px;
     width: 100%;
     overflow: hidden;
 }

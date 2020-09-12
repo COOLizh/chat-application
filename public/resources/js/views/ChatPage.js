@@ -10,17 +10,17 @@ let ChatPage = {
                 <input type="text" name="search" placeholder="Search...">
             </div>  
             <div class="chats">
-
+                <p id="zero-chats-message">You are not a member of any chat, create your own chat or find an already created chat by the chat name</p>
             </div>
         </div>
         <div class="correspondence-section">
             <section id="chat-info">
                   <h2>CoolChat</h2>
-                  <img src="resources/img/chat-logo.jpg" alt="CoolChat logo">
+                  <img src="resources/img/chat-logo.jpg" alt="CoolChat logo" id="chat-logo">
             </section>
             <div class="container">
                 <div class="correspondence">
-
+                    <p id="start-correspondence-text">Select chat to start messaging...</p>
                 </div>
             </div>
             <section class="text-area">
@@ -53,26 +53,54 @@ let ChatPage = {
         document.title = "CoolChat messaging";
 
         //get current user id for loading data and etc.
-        const userId = firebase.auth().currentUser.uid;
+        const currentUserId = firebase.auth().currentUser.uid;
 
         //cariable for current chat id
         let currentChatId = "";
 
         //check user chats and display information at chat page
         const database = new DB();
-        const userChats = await database.getUserChats(userId);
+        const userChats = await database.getUserChats(currentUserId);
         const container = document.querySelector(".chats");
-        for(const elem of userChats){
-            const section = document.createElement("section");
-            section.classList.add("chat");
-            section.setAttribute.disabled = true
-            section.innerHTML = `
-            <input type="hidden" name="chat-id" value="${elem.chatId}">
-            <p class="temp-chat-name">${elem.chatName}</p>
-            <p class="temp-last-message">LastUser: message</p>
-            <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
-            container.appendChild(section);
+        if(userChats != null){
+            //clearing list chats section
+            container.innerHTML = '';
+
+            //adding chats to chat list at left side of page
+            for(const elem of userChats){
+                const section = document.createElement("section");
+                section.classList.add("chat");
+                section.setAttribute.disabled = true
+                section.innerHTML = `
+                <input type="hidden" name="chat-id" value="${elem.chatId}">
+                <p class="temp-chat-name">${elem.chatName}</p>
+                <p class="temp-last-message">LastUser: message</p>
+                <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+                container.appendChild(section);
+            }
         }
+
+        //creating function to display user messages
+        let displayUserMessages = function(userId, message, block) {
+            const section = document.createElement("section");
+            if(userId == currentUserId) {
+                section.classList.add("temp-login-user-message");
+                section.innerHTML = `
+                    <img src="resources/img/unknown_male.png" alt="user-photo" class="user-photo">
+                    <span class="user-message">${message}</span>
+                    <p class="message-status">✓✓</p>
+                `;
+            } else {
+                section.classList.add("temp-other-users-message");
+                section.innerHTML = `
+                    <img src="resources/img/unknown_male.png" alt="user-photo" class="user-photo">
+                    <span class="user-message">${message}</span>
+                    <p class="message-status">✓✓</p>
+                `;
+            }
+            block.appendChild(section);
+        }
+
 
         //adding event listeners to chat list
         var chatList = document.querySelectorAll(".chat");
@@ -87,7 +115,6 @@ let ChatPage = {
 
                 //changing information about chat
                 let chatInfo = await database.getChatInfo(currentChatId);
-
                 const sectionParent = document.getElementById("chat-info");
                 let chatNameP = document.createElement("p");
                 chatNameP.id = "chat-name";
@@ -107,37 +134,34 @@ let ChatPage = {
                 sectionParent.append(kindOfChatP);
                 sectionParent.append(membersP);
 
-                /*<p id="chat-name">ChatName</p>
-                <img src="resources/img/unknown_user.png" alt="chat-photo">
-                <p id="kind-of-chat">public</p>
-                <p id="users-count">204 567 members</p>  */
+                //clearing chat section
+                const sectionCorrespondence = document.querySelector(".correspondence");
+                sectionCorrespondence.innerHTML = '';
+
+                //set messages to chat section
+                let chatMessages = await database.getChatMessages(currentChatId);
+                const block = document.querySelector(".correspondence")
+                const container = document.querySelector(".container");
+                for(let elem of chatMessages) {
+                    displayUserMessages(elem.userId, elem.messageText, block);
+                }
+                container.scrollTop = container.scrollHeight;
             });
         }
 
         //when user press enter, message will be send
         window.addEventListener ("keypress", function (e) {
             if (e.keyCode !== 13) return;
-            const [container, block, messageArea] = [...document.querySelectorAll(".container, .correspondence, #message")];
+            const [block, messageArea] = [...document.querySelectorAll(".correspondence, #message")];
             let message = messageArea.value;
             message = message.trim();
             if(message == ""){
                 messageArea.value = "";
                 return;
             }
-            database.setChatMessage(userId, document.getElementById("chat-id").value, message);
-            const section = document.createElement("section");
-            section.classList.add("temp-login-user-message");
-            section.innerHTML = `
-                <img src="resources/img/unknown_male.png" alt="user-photo" class="user-photo">
-                <span class="user-message">${message}</span>
-                <p class="message-status">✓✓</p>
-            `;
-            block.appendChild(section);
-            [...block.children].reverse().forEach((child, index) => child.style.bottom = (index * 150) + "px");
-            block.style.height = (block.children.length * 150) + "px";
-            container.scrollTop += 150;
+            database.setChatMessage(currentUserId, currentChatId, message);
+            displayUserMessages(currentUserId, message, block);
             messageArea.value = "";
-            
         });
 
     }

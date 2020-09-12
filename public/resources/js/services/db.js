@@ -79,12 +79,6 @@ export class DB {
         }
     }
 
-    // const snapshot = await firebase.database().ref().once("value")
-    // firebase.database().ref().push(data)
-    // firebase.database().ref().push(data).then(res => {
-    //     //do smth
-    // })
-
     async setChatMessage(userId, chatId, messageText) {
         let messages = await this.getChatMessages(chatId);
         if (messages == null) {
