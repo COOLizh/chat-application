@@ -107,6 +107,14 @@ body {
     border-right: none;
 }
 
+.chat:hover {
+    background-color: #346ABC;
+}
+
+.chat:hover .temp-chat-name, .chat:hover .temp-last-message{
+    color: white;
+}
+
 .chat > img{
     position: absolute;
     top: 0px;

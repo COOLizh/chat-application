@@ -10,66 +10,7 @@ let ChatPage = {
                 <input type="text" name="search" placeholder="Search...">
             </div>  
             <div class="chats">
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section id="temp-selected-chat">
-                    <p id="temp-chat-name">ChatName</p>
-                    <p id="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" id="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
-                <section class="chat">
-                    <p class="temp-chat-name">ChatName</p>
-                    <p class="temp-last-message">LastUser: message</p>
-                    <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">
-                </section>
+            
             </div>
         </div>
         <div class="correspondence-section">
@@ -113,11 +54,21 @@ let ChatPage = {
         document.title = "CoolChat messaging";
 
         //get current user id for loading data and etc.
-        console.log(firebase.auth().currentUser.uid)
+        const userId = firebase.auth().currentUser.uid;
 
-        //create temp chat
+        //check user chats and display information at chat page
         const database = new DB();
-        database.createChat(firebase.auth().currentUser.uid);
+        const userChats = await database.getUserChats(userId);
+        const container = document.querySelector(".chats");
+        for(const elem of userChats){
+            const section = document.createElement("section");
+            section.classList.add("chat");
+            section.innerHTML = `<p class="temp-chat-name">${elem.chatName}</p>
+            <p class="temp-last-message">LastUser: message</p>
+            <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+            container.appendChild(section);
+        }
+
 
         // database.addUserToChat(firebase.auth().currentUser.uid)
 
