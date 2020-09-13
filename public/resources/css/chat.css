@@ -35,8 +35,6 @@ body {
     height: 100%;
 }
 
-
-
 .search-and-settings {
     display: grid;
     grid-template-columns: 30% 70%;
@@ -147,27 +145,6 @@ body {
     background-color: #346ABC;
 }
 
-#temp-selected-chat > img{
-    position: absolute;
-    top: 0px;
-    left: 5%;
-    width: 97px;
-    height: 88px;
-}
-
-#temp-chat-name {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 5px;
-    color: white;
-}
-
-#temp-last-message {
-    font-size: 18px;
-    text-align: center;
-    color: white;
-}
-
 /* other chats */
 
 .chat {
@@ -206,6 +183,60 @@ body {
     font-size: 18px;
     text-align: center;
 }
+
+/* modal window */
+.close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35px;
+    height: 30px;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    border: 0;
+}
+
+.mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(52, 73, 94, 0.8);
+    z-index: 50;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.7s;
+}
+
+.modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 300px;
+    margin-left: -200px;
+    margin-top: -150px;
+    background: white;
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s ease-out;
+    transform: translateY(45px);
+}
+
+.active{
+    visibility: visible;
+    opacity: 1;
+}
+
+.active + .modal{
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
 
 /* middle side of page */ 
 #chat-info {

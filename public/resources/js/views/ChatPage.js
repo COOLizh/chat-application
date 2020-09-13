@@ -51,6 +51,16 @@ let ChatPage = {
                 <img src="resources/img/sticker11.png" alt="sticker11" id="last-sticker">
             </section>
         </div>
+    </div>
+    <div class="mask" role="dialog" style="display:none;"></div>
+    <div class="modal" role="alert" style="display:none;">
+        <input type="text" placeholder="Chat name" class="chat-name-input"/>
+        <select class="chat-type-select">
+            <option value="public">public</option>
+            <option value="private">private</option>
+        </select>
+        <input type="submit" value="Create chat" class="create-chat-button">
+        <button class="close" role="button">X</button>
     </div>`
         return view
     },
@@ -190,6 +200,21 @@ let ChatPage = {
             userChatsSection.style.display = "block";
             userSettingsSection.style.display = "none";
         });
+
+        //if user open settings and push create chat button modal window will be displayed
+        let mask = document.querySelector(".mask");
+        let modal = document.querySelector(".modal");
+        document.querySelector(".create-chat-button").addEventListener("click", function(e) {
+            mask.style.display = "block";
+            modal.style.display = "block";
+            mask.classList.add("active");
+        })
+        document.querySelector(".close").addEventListener("click", function(e){
+            mask.classList.remove("active");
+        })
+        mask.addEventListener("click", function (e) {
+            mask.classList.remove("active");
+        })
     }
 }
 
