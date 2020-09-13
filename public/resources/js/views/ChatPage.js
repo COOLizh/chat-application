@@ -54,6 +54,8 @@ let ChatPage = {
     </div>
     <div class="mask" role="dialog" style="display:none;"></div>
     <div class="modal" role="alert" style="display:none;">
+        <img src="resources/img/unknown_user.png" alt="default chat photo">
+        <p>Change chat photo</p>
         <input type="text" placeholder="Chat name" class="chat-name-input"/>
         <select class="chat-type-select">
             <option value="public">public</option>

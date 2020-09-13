@@ -224,6 +224,7 @@ body {
     opacity: 0;
     transition: 0.5s ease-out;
     transform: translateY(45px);
+    padding: 20px;
 }
 
 .active{
@@ -237,6 +238,48 @@ body {
     transform: translateY(0);
 }
 
+.modal > img {
+    display: block;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+}
+
+.modal > p{
+    text-align: center;
+    font-size: 18px;
+    text-decoration: underline;
+}
+
+.modal > p:hover{
+    color: #346ABC;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal > input{
+    width: 60%;
+    text-align: center;
+    height: 12%;
+    font-size: 28px;
+    margin-top: 7%;
+}
+
+.modal > input.create-chat-button {
+    width: 100%;
+    background-color:  black;
+    color:  white;
+    font-size: 28px;
+    margin-top: 9%;
+    height: 16%;
+}
+
+.chat-type-select {
+    height: 13%;
+    font-size: 26px;
+    width: 30%;
+    margin-left: 20px;
+}
 
 /* middle side of page */ 
 #chat-info {
