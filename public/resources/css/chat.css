@@ -77,9 +77,63 @@ body {
 }
 
 /* user-settings */
-.user-settings > img {
+
+.user-settings {
+    border: 3px solid black;
+    border-right: none;
+}
+
+#back-to-chat-button {
+    display: block;
     width: 50px;
     height: 50px;
+    margin: 20px;
+}
+#back-to-chat-button:hover {
+    cursor: pointer;
+}
+
+#user-photo {
+    margin: auto;
+    margin-top: 20%;
+    display: block;
+    width: 200px;
+    height: 200px;
+}
+
+#change-photo-button{
+    font-size: 18px;
+    text-align: center;
+    text-decoration: underline;
+    border: none;
+    margin-top: 10px;
+}
+
+#change-photo-button:hover{
+    cursor: pointer;
+    text-decoration: none;
+    color: #346ABC;
+    border: none;
+    background-color: white;
+}
+
+.user-settings > p {
+    margin: auto;
+    font-size: 36px;
+    border: 2px solid #346ABC;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 20%;
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.user-settings > p:hover {
+    cursor: pointer;
+    border: none;
+    background-color: #346ABC;
+    color: white;
 }
 
 
@@ -126,10 +180,12 @@ body {
 
 .chat:hover {
     background-color: #346ABC;
+    cursor: pointer;
 }
 
 .chat:hover .temp-chat-name, .chat:hover .temp-last-message{
     color: white;
+    cursor: pointer;
 }
 
 .chat > img{

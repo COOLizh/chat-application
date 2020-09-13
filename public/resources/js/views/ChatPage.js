@@ -16,6 +16,9 @@ let ChatPage = {
             </div>
             <div class="user-settings">
                 <img src="resources/img/blue-arrow.jpg" alt="Back to chats" id="back-to-chat-button">
+                <img src="resources/img/unknown_male.png" alt="user-photo" id="user-photo">
+                <p id="change-photo-button">Change photo</p>
+                <p class="create-chat-button">Create chat</p>
             </div>
         </div>
         <div class="correspondence-section">
