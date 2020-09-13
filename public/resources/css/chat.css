@@ -30,9 +30,12 @@ body {
 
 /* left side of page */
 
-.settings-chats-section{
+.settings-chats-section, .user-chats, .user-settings{
     width: 100%;
+    height: 100%;
 }
+
+
 
 .search-and-settings {
     display: grid;
@@ -41,6 +44,8 @@ body {
     border: 2px solid #000000;
     border-right: none;
 }
+
+/* user-chats */
 
 .search-and-settings  > button {
     font-size: 18px;
@@ -71,9 +76,14 @@ body {
     padding: 10px;
 }
 
+/* user-settings */
+.user-settings > img {
+    width: 50px;
+    height: 50px;
+}
+
 
 /* selected chat */
-
 #temp-selected-chat {
     position: relative;
     padding: 20px;
@@ -257,7 +267,7 @@ body {
     text-align: center;
 }
 
-.temp-login-user-message>img {
+.temp-login-user-message > img {
     display: block;
     float: right;
     margin-right: 20px;
@@ -267,23 +277,22 @@ body {
 }
 
 .temp-other-users-message {
-    position: absolute;
-    bottom: 0px;
+    margin: 20px;
     width: 100%;
     overflow: hidden;
 }
   
-  .temp-other-users-message>p {
+.temp-other-users-message > span {
+    display: block;
     float: left;
     margin-left: 20px;
-    width: 40%;
     text-align: center;
     background-color: #FFFBFB;
-    padding: 15px;
+    padding: 15px;  
     border-radius: 25px;
 }
   
-  .temp-other-users-message>img {
+.temp-other-users-message > img {
     display: block;
     float: left;
     margin-left: 20px;

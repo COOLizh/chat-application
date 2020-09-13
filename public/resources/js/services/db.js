@@ -99,6 +99,13 @@ export class DB {
             return null;
         }
     }
+
+    async newMessageReceived(chatId) {
+        await firebase.database().ref("/chats/" + chatId + "/messages").on('child_changed', function(snapshot) {
+            // all records after the last continue to invoke this function
+            console.log(snapshot.name(), snapshot.val()); 
+         });
+    }
 }
 
 export default DB

@@ -5,12 +5,17 @@ let ChatPage = {
     render: async () => {
         let view = `<div class="page-content">
         <div class="settings-chats-section">
-            <div class="search-and-settings">
-                <button class="settings">☰</button>
-                <input type="text" name="search" placeholder="Search...">
-            </div>  
-            <div class="chats">
-                <p id="zero-chats-message">You are not a member of any chat, create your own chat or find an already created chat by the chat name</p>
+            <div class="user-chats">
+                <div class="search-and-settings">
+                    <button class="settings">☰</button>
+                    <input type="text" name="search" placeholder="Search...">
+                </div>  
+                <div class="chats">
+                    <p id="zero-chats-message">You are not a member of any chat, create your own chat or find an already created chat by the chat name</p>
+                </div>
+            </div>
+            <div class="user-settings">
+                <img src="resources/img/blue-arrow.jpg" alt="Back to chats" id="back-to-chat-button">
             </div>
         </div>
         <div class="correspondence-section">
@@ -95,7 +100,6 @@ let ChatPage = {
                 section.innerHTML = `
                     <img src="resources/img/unknown_male.png" alt="user-photo" class="user-photo">
                     <span class="user-message">${message}</span>
-                    <p class="message-status">✓✓</p>
                 `;
             }
             block.appendChild(section);
@@ -146,7 +150,10 @@ let ChatPage = {
                     displayUserMessages(elem.userId, elem.messageText, block);
                 }
                 container.scrollTop = container.scrollHeight;
+                //adding listener to new messages
+                await database.newMessageReceived(currentChatId);
             });
+            
         }
 
         //when user press enter, message will be send
@@ -164,6 +171,22 @@ let ChatPage = {
             messageArea.value = "";
         });
 
+        //when user press ☰, it will open to user settings button
+        const userChatsSection = document.querySelector(".user-chats");
+        const userSettingsSection = document.querySelector(".user-settings");
+        const backToChatButton = document.getElementById("back-to-chat-button");
+        document.querySelector(".settings").addEventListener("click", function(e) {
+            console.log(userChatsSection);
+            console.log(userSettingsSection);
+            e.preventDefault();
+            userChatsSection.style.display = "none";
+            userSettingsSection.style.display = "block";
+        });
+        backToChatButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            userChatsSection.style.display = "block";
+            userSettingsSection.style.display = "none";
+        });
     }
 }
 
