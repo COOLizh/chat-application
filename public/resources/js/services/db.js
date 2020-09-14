@@ -20,7 +20,6 @@ export class DB {
             .catch(function (error) {
                 console.log(error)
             });
-        console.log("herer")
         firebase.database().ref("/users/" + key).set({
             name: name,
             surname: surname,
@@ -30,13 +29,14 @@ export class DB {
         });
     }
 
-    async createChat(userId) {
+    async createChat(userId, chatName, chatType, chatPassword) {
         const newChatId = await firebase.database().ref("/chats").push({
-            chatName: "temp chat",
+            chatName: chatName,
+            chatType: chatType,
+            chatPhotoLink: "resources/img/person.png",
             membersCount: 1,
+            password: chatPassword
         }).then(res => {
-            console.log(res.key)
-            console.log(res.getKey())
             return res.key
         });
         await this.addUserToChat(userId, newChatId);
@@ -62,12 +62,13 @@ export class DB {
     }
 
     async addUserToChat(userId, chatId) {
-        let chats = await this.getUserChats(userId);
-        if(chats == null) {
-            chats = [];
+        let snapshot = await firebase.database().ref("/users/" + userId + "/chats").once("value");
+        let chats = [];
+        if(snapshot.exists()){
+            chats = snapshot.val();
         }
         chats.push(chatId);
-        firebase.database().ref("/users/" + userId + "/chats").set(chats);
+        firebase.database().ref("/users/" + userId+ "/chats/").set(chats);
     }
 
     async getChatMessages(chatId) {
@@ -105,6 +106,15 @@ export class DB {
             // all records after the last continue to invoke this function
             console.log(snapshot.name(), snapshot.val()); 
          });
+    }
+
+    async getUserInfo(userId) {
+        const snapshot = await firebase.database().ref("/users/" + userId).once("value");
+        if(snapshot.exists()) {
+            return snapshot.val();
+        } else {
+            return null;
+        }
     }
 }
 
