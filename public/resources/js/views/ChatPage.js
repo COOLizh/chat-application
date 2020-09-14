@@ -81,8 +81,6 @@ let ChatPage = {
         //get current user id for loading data and etc.
         const currentUserId = firebase.auth().currentUser.uid;
 
-        
-
         //cariable for current chat id
         let currentChatId = "";
 
@@ -103,7 +101,7 @@ let ChatPage = {
             for(const elem of userChats){
                 const section = document.createElement("section");
                 section.classList.add("chat");
-                section.setAttribute.disabled = true
+                section.setAttribute.disabled = true;
                 section.innerHTML = `
                 <input type="hidden" name="chat-id" value="${elem.chatId}">
                 <p class="temp-chat-name">${elem.chatName}</p>
@@ -112,6 +110,8 @@ let ChatPage = {
                 container.appendChild(section);
             }
         }
+
+        
 
         //creating function to display user messages
         let displayUserMessages = function(userId, message, block) {
@@ -133,58 +133,61 @@ let ChatPage = {
             block.appendChild(section);
         }
 
+        //creating function to refresh chat list
+        let refreshChatsList = function(){
+            var chatList = document.querySelectorAll(".chat");
+            for(let i = 0; i < chatList.length; i++){
+                chatList[i].addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    //changing current chat id
+                    currentChatId = chatList[i].childNodes[1].value;
 
-        //adding event listeners to chat list
-        var chatList = document.querySelectorAll(".chat");
-        for(let i = 0; i < chatList.length; i++){
-            chatList[i].addEventListener('click', async (event) => {
-                event.preventDefault();
-                //changing current chat id
-                currentChatId = chatList[i].childNodes[1].value;
+                    //making text message is abled
+                    document.getElementById("message").disabled = false;
 
-                //making text message is abled
-                document.getElementById("message").disabled = false;
+                    //changing information about chat
+                    let chatInfo = await database.getChatInfo(currentChatId);
+                    const sectionParent = document.getElementById("chat-info");
+                    let chatNameP = document.createElement("p");
+                    chatNameP.id = "chat-name";
+                    chatNameP.innerText = chatInfo.chatName;
+                    let chatImg = document.createElement("img");
+                    chatImg.src = "resources/img/unknown_user.png";
+                    chatImg.alt = "chat-photo";
+                    let kindOfChatP = document.createElement("p");
+                    kindOfChatP.id = "kind-of-chat";
+                    kindOfChatP.innerText = "public";
+                    let membersP = document.createElement("p");
+                    membersP.id = "users-count";
+                    membersP.innerText = chatInfo.membersCount + " members";
+                    sectionParent.innerHTML = '';
+                    sectionParent.append(chatNameP);
+                    sectionParent.append(chatImg);
+                    sectionParent.append(kindOfChatP);
+                    sectionParent.append(membersP);
 
-                //changing information about chat
-                let chatInfo = await database.getChatInfo(currentChatId);
-                const sectionParent = document.getElementById("chat-info");
-                let chatNameP = document.createElement("p");
-                chatNameP.id = "chat-name";
-                chatNameP.innerText = chatInfo.chatName;
-                let chatImg = document.createElement("img");
-                chatImg.src = "resources/img/unknown_user.png";
-                chatImg.alt = "chat-photo";
-                let kindOfChatP = document.createElement("p");
-                kindOfChatP.id = "kind-of-chat";
-                kindOfChatP.innerText = "public";
-                let membersP = document.createElement("p");
-                membersP.id = "users-count";
-                membersP.innerText = chatInfo.membersCount + " members";
-                sectionParent.innerHTML = '';
-                sectionParent.append(chatNameP);
-                sectionParent.append(chatImg);
-                sectionParent.append(kindOfChatP);
-                sectionParent.append(membersP);
+                    //clearing chat section
+                    const sectionCorrespondence = document.querySelector(".correspondence");
+                    sectionCorrespondence.innerHTML = '';
 
-                //clearing chat section
-                const sectionCorrespondence = document.querySelector(".correspondence");
-                sectionCorrespondence.innerHTML = '';
-
-                //set messages to chat section
-                let chatMessages = await database.getChatMessages(currentChatId);
-                const block = document.querySelector(".correspondence")
-                const container = document.querySelector(".container");
-                if(chatMessages != null){
-                    for(let elem of chatMessages) {
-                        displayUserMessages(elem.userId, elem.messageText, block);
+                    //set messages to chat section
+                    let chatMessages = await database.getChatMessages(currentChatId);
+                    const block = document.querySelector(".correspondence")
+                    const container = document.querySelector(".container");
+                    if(chatMessages != null){
+                        for(let elem of chatMessages) {
+                            displayUserMessages(elem.userId, elem.messageText, block);
+                        }
                     }
-                }
-                container.scrollTop = container.scrollHeight;
-                //adding listener to new messages
-                await database.newMessageReceived(currentChatId);
-            });
-            
+                    container.scrollTop = container.scrollHeight;
+                });
+            }
         }
+        //refreshing chat list
+        refreshChatsList();
+
+        //setting listener to new user chats
+        database.addListenerToUserChats(currentUserId, container, refreshChatsList);
 
         //when user press enter, message will be send
         window.addEventListener ("keypress", function (e) {
@@ -207,8 +210,6 @@ let ChatPage = {
         const backToChatButton = document.getElementById("back-to-chat-button");
         
         document.querySelector(".settings").addEventListener("click", function(e) {
-            console.log(userChatsSection);
-            console.log(userSettingsSection);
             e.preventDefault();
             userChatsSection.style.display = "none";
             userSettingsSection.style.display = "block";
