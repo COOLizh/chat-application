@@ -103,8 +103,8 @@ export class DB {
 
     async newMessageReceived(chatId) {
         await firebase.database().ref("/chats/" + chatId + "/messages").on('child_changed', function(snapshot) {
-            // all records after the last continue to invoke this function
-            console.log(snapshot.name(), snapshot.val()); 
+            
+            console.log(snapshot.name(), snapshot.val());
          });
     }
 
@@ -116,26 +116,6 @@ export class DB {
             return null;
         }
     }
-
-    addListenerToUserChats(userId, container, refreshChatsFunction) {
-        firebase.database().ref("/users/" + userId + "/chats").on("child_added", async (snapshot) => {
-            if(container.firstChild.nodeName == "#text") {
-                container.innerHTML = '';
-            };
-            let newChatId = snapshot.val();
-            let newChatInfo = await this.getChatInfo(snapshot.val());
-            let section = document.createElement("section");
-            section.classList.add("chat");
-            section.setAttribute.disabled = true;
-            section.innerHTML = `
-            <input type="hidden" name="chat-id" value="${newChatId}">
-            <p class="temp-chat-name">${newChatInfo.chatName}</p>
-            <p class="temp-last-message">*There is no messages yet*</p>
-            <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
-            container.append(section);
-            refreshChatsFunction();
-        })
-    } 
 }
 
 export default DB

@@ -8,10 +8,18 @@ let ChatPage = {
             <div class="user-chats">
                 <div class="search-and-settings">
                     <button class="settings">☰</button>
-                    <input type="text" name="search" placeholder="Search...">
+                    <input type="text" name="search" placeholder="Search..." id="search">
                 </div>  
                 <div class="chats">
                     <p id="zero-chats-message">You are not a member of any chat, create your own chat or find an already created chat by the chat name</p>
+                </div>
+                <div class="search-results">
+                    <p>Users</p>
+                    <div class="users">
+                    </div>
+                    <p>Chats</p>
+                    <div class="chats">
+                    </div>
                 </div>
             </div>
             <div class="user-settings">
@@ -90,104 +98,103 @@ let ChatPage = {
         //get current user information
         let currentUserInfo = await database.getUserInfo(currentUserId);
 
-        //check user chats and display them if exists
-        const userChats = await database.getUserChats(currentUserId);
-        const container = document.querySelector(".chats");
-        if(userChats != null){
-            //clearing list chats section
-            container.innerHTML = '';
+        const chatInfoSection = document.getElementById("chat-info");
+        const correspondenceSection = document.querySelector(".correspondence");
+        const userMessageInput = document.getElementById("message");
+        const chatsContainer = document.querySelector(".chats");
+        const startMessagingP = document.getElementById("start-correspondence-text");
+        let zeroChatsMessage = document.createElement("p");
+        zeroChatsMessage.id = "start-correspondence-text"
+        zeroChatsMessage.style.display = "none";
+        zeroChatsMessage.innerText = "There is no messages in this chat";
+        correspondenceSection.appendChild(zeroChatsMessage);
 
-            //adding chats to chat list at left side of page
-            for(const elem of userChats){
-                const section = document.createElement("section");
-                section.classList.add("chat");
-                section.setAttribute.disabled = true;
-                section.innerHTML = `
-                <input type="hidden" name="chat-id" value="${elem.chatId}">
-                <p class="temp-chat-name">${elem.chatName}</p>
-                <p class="temp-last-message">LastUser: message</p>
-                <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
-                container.appendChild(section);
-            }
-        }
-
-        
-
-        //creating function to display user messages
-        let displayUserMessages = function(userId, message, block) {
-            const section = document.createElement("section");
-            if(userId == currentUserId) {
-                section.classList.add("temp-login-user-message");
-                section.innerHTML = `
-                    <img src="resources/img/unknown_male.png" alt="user-photo" class="user-photo">
-                    <span class="user-message">${message}</span>
-                    <p class="message-status">✓✓</p>
-                `;
+        //function for displaying user messages
+        let displayUserMessage = async function(userId, message) {
+            let userInfo = await database.getUserInfo(userId);
+            let userMessageSection = document.createElement("section");
+            let userPhoto = document.createElement("img");
+            userPhoto.src = userInfo.photoLink;
+            userPhoto.classList.add("user-photo");
+            let userMessage = document.createElement("span");
+            userMessage.innerText = message;
+            userMessage.classList.add("user-message")
+            if(userId == firebase.auth().currentUser.uid) {
+                userMessageSection.classList.add("temp-login-user-message");
             } else {
-                section.classList.add("temp-other-users-message");
+                userMessageSection.classList.add("temp-other-users-message");
+            }
+            userMessageSection.appendChild(userPhoto);
+            userMessageSection.appendChild(userMessage);
+            correspondenceSection.appendChild(userMessageSection);
+        }
+
+        firebase.database().ref("/users/" + currentUserId + "/chats").on("child_added", async (snapshot) => {
+            document.getElementById("zero-chats-message").style.display = "none";
+            let newChatId = snapshot.val();
+            let newChatInfo = await database.getChatInfo(snapshot.val());
+            let messages = newChatInfo.messages;
+            let section = document.createElement("section");
+            section.classList.add("chat");
+            section.setAttribute.disabled = true;
+            if(messages === undefined){
                 section.innerHTML = `
-                    <img src="resources/img/unknown_male.png" alt="user-photo" class="user-photo">
-                    <span class="user-message">${message}</span>
-                `;
+                <input type="hidden" name="chat-id" value="${newChatId}">
+                <p class="temp-chat-name">${newChatInfo.chatName}</p>
+                <p class="temp-last-message">*No messages*</p>
+                <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+            } else {
+                let userInfo = await database.getUserInfo(messages[messages.length - 1].userId);
+                section.innerHTML = `
+                <input type="hidden" name="chat-id" value="${newChatId}">
+                <p class="temp-chat-name">${newChatInfo.chatName}</p>
+                <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": " + messages[messages.length - 1].messageText}</p>
+                <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
             }
-            block.appendChild(section);
-        }
+            section.addEventListener('click', async (event) => {
+                //filling chat info section
+                event.preventDefault();
+                startMessagingP.style.display = "none";
+                correspondenceSection.innerHTML = '';
+                let chatInfo = await database.getChatInfo(newChatId);
+                let chatNameP = document.createElement("p");
+                chatNameP.id = "chat-name";
+                chatNameP.innerText = newChatInfo.chatName;
+                let chatImg = document.createElement("img");
+                chatImg.src = newChatInfo.chatPhotoLink;
+                chatImg.alt = "chat-photo";
+                let kindOfChatP = document.createElement("p");
+                kindOfChatP.id = "kind-of-chat";
+                kindOfChatP.innerText = newChatInfo.chatType;
+                let membersP = document.createElement("p");
+                membersP.id = "users-count";
+                membersP.innerText = chatInfo.membersCount + " members";
+                chatInfoSection.innerHTML = '';
+                chatInfoSection.append(chatNameP);
+                chatInfoSection.append(chatImg);
+                chatInfoSection.append(kindOfChatP);
+                chatInfoSection.append(membersP);
 
-        //creating function to refresh chat list
-        let refreshChatsList = function(){
-            var chatList = document.querySelectorAll(".chat");
-            for(let i = 0; i < chatList.length; i++){
-                chatList[i].addEventListener('click', async (event) => {
-                    event.preventDefault();
-                    //changing current chat id
-                    currentChatId = chatList[i].childNodes[1].value;
+                currentChatId = newChatId;
 
-                    //making text message is abled
-                    document.getElementById("message").disabled = false;
-
-                    //changing information about chat
-                    let chatInfo = await database.getChatInfo(currentChatId);
-                    const sectionParent = document.getElementById("chat-info");
-                    let chatNameP = document.createElement("p");
-                    chatNameP.id = "chat-name";
-                    chatNameP.innerText = chatInfo.chatName;
-                    let chatImg = document.createElement("img");
-                    chatImg.src = "resources/img/unknown_user.png";
-                    chatImg.alt = "chat-photo";
-                    let kindOfChatP = document.createElement("p");
-                    kindOfChatP.id = "kind-of-chat";
-                    kindOfChatP.innerText = "public";
-                    let membersP = document.createElement("p");
-                    membersP.id = "users-count";
-                    membersP.innerText = chatInfo.membersCount + " members";
-                    sectionParent.innerHTML = '';
-                    sectionParent.append(chatNameP);
-                    sectionParent.append(chatImg);
-                    sectionParent.append(kindOfChatP);
-                    sectionParent.append(membersP);
-
-                    //clearing chat section
-                    const sectionCorrespondence = document.querySelector(".correspondence");
-                    sectionCorrespondence.innerHTML = '';
-
-                    //set messages to chat section
-                    let chatMessages = await database.getChatMessages(currentChatId);
-                    const block = document.querySelector(".correspondence")
-                    const container = document.querySelector(".container");
-                    if(chatMessages != null){
-                        for(let elem of chatMessages) {
-                            displayUserMessages(elem.userId, elem.messageText, block);
-                        }
+                //displaying messages of chat
+                if(messages === undefined){
+                    zeroChatsMessage.style.display = "block";
+                } else {
+                    zeroChatsMessage.style.display = "none";
+                    for(let mes of messages){
+                        await displayUserMessage(mes.userId, mes.messageText)
                     }
-                    container.scrollTop = container.scrollHeight;
-                });
-            }
-        }
-        //refreshing chat list
-        refreshChatsList();
-
-        //setting listener to new user chats
-        database.addListenerToUserChats(currentUserId, container, refreshChatsList);
+                }
+                userMessageInput.disabled = false;
+            })
+            chatsContainer.append(section);
+            // firebase.database().ref("/chats/" + newChatId + "/messages").on("child_added", async (snapshot) => {
+            //     const newMessage = snapshot.val();
+            //     console.log(newMessage);
+            //     await displayUserMessages(newMessage.userId, newMessage.messageText);
+            // })
+        })
 
         //when user press enter, message will be send
         window.addEventListener ("keypress", function (e) {
@@ -200,7 +207,6 @@ let ChatPage = {
                 return;
             }
             database.setChatMessage(currentUserId, currentChatId, message);
-            displayUserMessages(currentUserId, message, block);
             messageArea.value = "";
         });
 
@@ -261,6 +267,21 @@ let ChatPage = {
                 } 
             }
         })
+
+        //seach-result by deafult is dispblay none
+        const searchDiv = document.querySelector(".search-results");
+        searchDiv.style.display = "none";
+        const searchInput = document.getElementById("search");
+        searchInput.addEventListener('input', function(e) {
+            let val = e.target.value.trim();
+            if (val.length) {
+                searchDiv.style.display = "block";
+                chatsContainer.style.display = "none";
+            } else {
+                searchDiv.style.display = "none";
+                chatsContainer.style.display = "block";
+            }
+        });
     }
 }
 
