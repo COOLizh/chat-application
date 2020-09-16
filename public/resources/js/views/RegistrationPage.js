@@ -1,4 +1,4 @@
-import DB from "../services/db.js"
+import {database} from "../services/db.js"
 
 let RegistrationPage = {
     render: async () => {
@@ -31,7 +31,7 @@ let RegistrationPage = {
             if (password != confirmPassword){
                 alert("Passsword != confirm password");
             } else {
-                let database = new DB();
+                // let database = new DB();
                 database.createUser(name, surname, username, email, password);
                 alert("Succesfully registered")
             }

@@ -1,4 +1,4 @@
-import DB from "../services/db.js"
+import {database} from "../services/db.js"
 
 let LoginPage = {
     render: async () => {
@@ -26,7 +26,7 @@ let LoginPage = {
             event.preventDefault()
             let email = document.getElementById("email").value;
             let password = document.getElementById("password").value;
-            let database = new DB();
+            // let database = new DB();
             database.loginUser(email, password);
         })
     }

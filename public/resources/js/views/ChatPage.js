@@ -1,4 +1,5 @@
-import DB from "../services/db.js"
+import {database} from "../services/db.js"
+import * as listeners from "../services/listeners.js"
 
 // SPA
 let ChatPage = {
@@ -90,10 +91,10 @@ let ChatPage = {
         const currentUserId = firebase.auth().currentUser.uid;
 
         //cariable for current chat id
-        let currentChatId = "";
+        const currentChatId = { id: "" };
 
         //creating database object to work with database
-        const database = new DB();
+        // const database = new DB();
 
         //get current user information
         let currentUserInfo = await database.getUserInfo(currentUserId);
@@ -110,90 +111,29 @@ let ChatPage = {
         correspondenceSection.appendChild(zeroChatsMessage);
 
         //function for displaying user messages
-        let displayUserMessage = async function(userId, message) {
-            let userInfo = await database.getUserInfo(userId);
-            let userMessageSection = document.createElement("section");
-            let userPhoto = document.createElement("img");
-            userPhoto.src = userInfo.photoLink;
-            userPhoto.classList.add("user-photo");
-            let userMessage = document.createElement("span");
-            userMessage.innerText = message;
-            userMessage.classList.add("user-message")
-            if(userId == firebase.auth().currentUser.uid) {
-                userMessageSection.classList.add("temp-login-user-message");
-            } else {
-                userMessageSection.classList.add("temp-other-users-message");
-            }
-            userMessageSection.appendChild(userPhoto);
-            userMessageSection.appendChild(userMessage);
-            correspondenceSection.appendChild(userMessageSection);
-        }
+        // let displayUserMessage = 
 
         firebase.database().ref("/users/" + currentUserId + "/chats").on("child_added", async (snapshot) => {
-            document.getElementById("zero-chats-message").style.display = "none";
-            let newChatId = snapshot.val();
-            let newChatInfo = await database.getChatInfo(snapshot.val());
-            let messages = newChatInfo.messages;
-            let section = document.createElement("section");
-            section.classList.add("chat");
-            section.setAttribute.disabled = true;
-            if(messages === undefined){
-                section.innerHTML = `
-                <input type="hidden" name="chat-id" value="${newChatId}">
-                <p class="temp-chat-name">${newChatInfo.chatName}</p>
-                <p class="temp-last-message">*No messages*</p>
-                <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
-            } else {
-                let userInfo = await database.getUserInfo(messages[messages.length - 1].userId);
-                section.innerHTML = `
-                <input type="hidden" name="chat-id" value="${newChatId}">
-                <p class="temp-chat-name">${newChatInfo.chatName}</p>
-                <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": " + messages[messages.length - 1].messageText}</p>
-                <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
-            }
-            section.addEventListener('click', async (event) => {
-                //filling chat info section
-                event.preventDefault();
-                startMessagingP.style.display = "none";
-                correspondenceSection.innerHTML = '';
-                let chatInfo = await database.getChatInfo(newChatId);
-                let chatNameP = document.createElement("p");
-                chatNameP.id = "chat-name";
-                chatNameP.innerText = newChatInfo.chatName;
-                let chatImg = document.createElement("img");
-                chatImg.src = newChatInfo.chatPhotoLink;
-                chatImg.alt = "chat-photo";
-                let kindOfChatP = document.createElement("p");
-                kindOfChatP.id = "kind-of-chat";
-                kindOfChatP.innerText = newChatInfo.chatType;
-                let membersP = document.createElement("p");
-                membersP.id = "users-count";
-                membersP.innerText = chatInfo.membersCount + " members";
-                chatInfoSection.innerHTML = '';
-                chatInfoSection.append(chatNameP);
-                chatInfoSection.append(chatImg);
-                chatInfoSection.append(kindOfChatP);
-                chatInfoSection.append(membersP);
+            await listeners.handleNewChat(
+                snapshot, 
+                chatInfoSection,
+                correspondenceSection,
+                userMessageInput,
+                chatsContainer,
+                startMessagingP,
+                currentChatId
+            )
 
-                currentChatId = newChatId;
+            firebase.database().ref("/chats/" + snapshot.val() + "/messages").on("child_added", async (snapshot) => {
+                console.log("Handling new message in chat id -> " + snapshot.ref.path.pieces_[1] + 
+                            " , and userId -> " + snapshot.val().userId)
 
-                //displaying messages of chat
-                if(messages === undefined){
-                    zeroChatsMessage.style.display = "block";
-                } else {
-                    zeroChatsMessage.style.display = "none";
-                    for(let mes of messages){
-                        await displayUserMessage(mes.userId, mes.messageText)
-                    }
-                }
-                userMessageInput.disabled = false;
+                await listeners.handleNewMessage(
+                    snapshot, 
+                    currentChatId, 
+                    correspondenceSection
+                )
             })
-            chatsContainer.append(section);
-            // firebase.database().ref("/chats/" + newChatId + "/messages").on("child_added", async (snapshot) => {
-            //     const newMessage = snapshot.val();
-            //     console.log(newMessage);
-            //     await displayUserMessages(newMessage.userId, newMessage.messageText);
-            // })
         })
 
         //when user press enter, message will be send
@@ -206,7 +146,7 @@ let ChatPage = {
                 messageArea.value = "";
                 return;
             }
-            database.setChatMessage(currentUserId, currentChatId, message);
+            database.setChatMessage(currentUserId, currentChatId.id, message);
             messageArea.value = "";
         });
 

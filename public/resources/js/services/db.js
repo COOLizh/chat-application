@@ -118,4 +118,4 @@ export class DB {
     }
 }
 
-export default DB
+export const database = new DB()
