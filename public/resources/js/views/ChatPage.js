@@ -215,7 +215,7 @@ let ChatPage = {
                 searchDiv.style.display = "none";
                 chatsContainer.style.display = "block";
             }
-            await database.getSearchResults(currentUserId)
+            await database.getSearchResults(currentUserId ,val)
         });
     }
 }

@@ -140,8 +140,8 @@ export class DB {
             return null
         }
     }
-    async getSearchResults(userId) {
-        //const allChatsSnapshot = await firebase.ref("/chats/").once("value");
+
+    async getAllChatsAndUsersWhichUserIsNotMember(userId){
         const userChats = await firebase.database().ref("/users/" + userId + "/chats").once("value");
         const allUsers = await this.getAllUsers()
         const allChats = await this.getAllChats()
@@ -158,7 +158,6 @@ export class DB {
             let isUserHaveSuchChat = false;
             if(userChats.val() != null){
                 for(let i = 0; i < userChats.val().length; i++){
-                    console.log(userChats.val()[i])
                     if(userChats.val()[i] == chat.id){
                         isUserHaveSuchChat = true;
                         break;
@@ -174,9 +173,41 @@ export class DB {
                 }
             }
         }
-        console.log(users);
-        console.log(privateChats);
-        console.log(publicChats);
+
+        let results = {
+            users: users,
+            publicChats: publicChats,
+            privateChats: privateChats
+        }
+
+        return results
+    }
+
+    async getSearchResults(userId, searchString) {
+        let users = []
+        let privateChats = []
+        let publicChats = []
+        let usersAndChats = await this.getAllChatsAndUsersWhichUserIsNotMember(userId)
+        for(let usr of usersAndChats.users){
+            if(usr.username.indexOf(searchString) == 0){
+                users.push(usr);
+            }
+        }
+    
+        for(let cht of usersAndChats.publicChats){
+            if(cht.chatName.indexOf(searchString) == 0){
+                publicChats.push(cht);
+            }
+        }
+    
+        for(let cht of usersAndChats.privateChats){
+            if(cht.chatName.indexOf(searchString) == 0){
+                privateChats.push(cht);
+            }
+        }
+        
+
+        console.log(users, publicChats, privateChats)
     }
 }
 
