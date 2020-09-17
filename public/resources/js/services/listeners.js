@@ -49,11 +49,9 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
         chatInfoSection.append(membersP);
 
         currentChatId.id = newChatId;
-        console.log("Switched to new chat, id -> " + currentChatId.id)
 
         const messages = await database.getChatMessages(currentChatId.id)
 
-        console.log(messages)
         if (messages != null) {
             for (let i = 0; i < messages.length; i++) {
                 const userInfo = await database.getUserInfo(messages[i].userId);

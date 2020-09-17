@@ -16,5 +16,4 @@ export function displayUserMessage(userId, message, correspondenceSection, userI
     userMessageSection.appendChild(userPhoto);
     userMessageSection.appendChild(userMessage);
     correspondenceSection.appendChild(userMessageSection);
-    console.log(correspondenceSection)
 }

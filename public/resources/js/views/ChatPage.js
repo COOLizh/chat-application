@@ -110,9 +110,6 @@ let ChatPage = {
         zeroChatsMessage.innerText = "There is no messages in this chat";
         correspondenceSection.appendChild(zeroChatsMessage);
 
-        //function for displaying user messages
-        // let displayUserMessage = 
-
         firebase.database().ref("/users/" + currentUserId + "/chats").on("child_added", async (snapshot) => {
             await listeners.handleNewChat(
                 snapshot, 
@@ -125,9 +122,6 @@ let ChatPage = {
             )
 
             firebase.database().ref("/chats/" + snapshot.val() + "/messages").on("child_added", async (snapshot) => {
-                console.log("Handling new message in chat id -> " + snapshot.ref.path.pieces_[1] + 
-                            " , and userId -> " + snapshot.val().userId)
-
                 await listeners.handleNewMessage(
                     snapshot, 
                     currentChatId, 
@@ -212,7 +206,7 @@ let ChatPage = {
         const searchDiv = document.querySelector(".search-results");
         searchDiv.style.display = "none";
         const searchInput = document.getElementById("search");
-        searchInput.addEventListener('input', function(e) {
+        searchInput.addEventListener('input', async function(e) {
             let val = e.target.value.trim();
             if (val.length) {
                 searchDiv.style.display = "block";
@@ -221,6 +215,7 @@ let ChatPage = {
                 searchDiv.style.display = "none";
                 chatsContainer.style.display = "block";
             }
+            await database.getSearchResults(currentUserId)
         });
     }
 }

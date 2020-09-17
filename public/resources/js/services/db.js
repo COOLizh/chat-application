@@ -116,6 +116,68 @@ export class DB {
             return null;
         }
     }
+
+    async getAllUsers() {
+        const snapshot = await firebase.database().ref("/users/").once("value");
+        if (snapshot.exists()) {
+            return [...Object.keys(snapshot.val()).map(key => ({
+                id: key,
+                ...snapshot.val()
+            }))]
+        } else {
+            return null
+        }
+    }
+
+    async getAllChats() {
+        const snapshot = await firebase.database().ref("/chats").once("value");
+        if (snapshot.exists()) {
+            return [...Object.keys(snapshot.val()).map(key => ({
+                id: key,
+                ...snapshot.val()
+            }))]
+        } else {
+            return null
+        }
+    }
+    async getSearchResults(userId) {
+        //const allChatsSnapshot = await firebase.ref("/chats/").once("value");
+        const userChats = await firebase.database().ref("/users/" + userId + "/chats").once("value");
+        const allUsers = await this.getAllUsers()
+        const allChats = await this.getAllChats()
+        const users = [];
+        const publicChats = [];
+        const privateChats = [];
+        for(const user of allUsers){
+            if(user.id != userId){
+                const tmpUsr = await this.getUserInfo(user.id);
+                users.push(tmpUsr)
+            }
+        }
+        for(const chat of allChats){
+            let isUserHaveSuchChat = false;
+            if(userChats.val() != null){
+                for(let i = 0; i < userChats.val().length; i++){
+                    console.log(userChats.val()[i])
+                    if(userChats.val()[i] == chat.id){
+                        isUserHaveSuchChat = true;
+                        break;
+                    }
+                }
+            }
+            if(!isUserHaveSuchChat){
+                const tmpChat = await this.getChatInfo(chat.id);
+                if(tmpChat.chatType == "public"){
+                    publicChats.push(tmpChat);
+                } else {
+                    privateChats.push(tmpChat);
+                }
+            }
+        }
+        console.log(users);
+        console.log(privateChats);
+        console.log(publicChats);
+    }
 }
 
 export const database = new DB()
