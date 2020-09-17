@@ -143,18 +143,37 @@ body {
     text-align: center;
 }
 
+/* search results*/
 
-/* selected chat */
-#temp-selected-chat {
-    position: relative;
-    padding: 20px;
+/* user search results */
+.user-search-block {
+    display: grid;
+    width: 100%;
+    height: 20%;
+    grid-template-columns: 40% 60%;
     border: 2px solid black;
     border-top: none;
     border-right: none;
-    background-color: #346ABC;
 }
 
-/* other chats */
+.user-search-block > img {
+    width: 70px;
+    height: 70px;
+    margin-left: 50%;
+}
+
+.user-search-info > p {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#nothing-found-text{
+    margin-top: 40%;
+    text-align: center;
+}
+
+/* chats */
 
 .chat {
     position: relative;

@@ -80,14 +80,15 @@ export class DB {
         }
     }
 
-    async setChatMessage(userId, chatId, messageText) {
+    async setChatMessage(userId, chatId, messageText, messageType) {
         let messages = await this.getChatMessages(chatId);
         if (messages == null) {
             messages = [];
         }
         messages.push({
             userId: userId, 
-            messageText: messageText
+            messageText: messageText,
+            messageType: messageType
         });
         firebase.database().ref("/chats/" + chatId + "/messages").set(messages)
     }
@@ -205,9 +206,14 @@ export class DB {
                 privateChats.push(cht);
             }
         }
-        
 
-        console.log(users, publicChats, privateChats)
+        let chats = privateChats.concat(publicChats)
+        console.log(chats)
+        let result = {
+            users: users,
+            chats: chats,
+        }
+        return result
     }
 }
 

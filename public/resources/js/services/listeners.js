@@ -59,7 +59,8 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
                     messages[i].userId, 
                     messages[i].messageText, 
                     correspondenceSection,
-                    userInfo
+                    userInfo,
+                    messages[i].messageType
                 )
             }
         }
@@ -78,7 +79,8 @@ export async function handleNewMessage(snapshot, currentChatId, correspondenceSe
             snapshot.val().userId,
             snapshot.val().messageText,
             correspondenceSection,
-            userInfo
+            userInfo,
+            snapshot.val().messageType
         )
     }
 }

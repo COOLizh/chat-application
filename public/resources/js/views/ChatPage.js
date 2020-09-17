@@ -1,4 +1,5 @@
 import {database} from "../services/db.js"
+import { displaySearchResults } from "../services/elementHelpers.js"
 import * as listeners from "../services/listeners.js"
 
 // SPA
@@ -15,12 +16,11 @@ let ChatPage = {
                     <p id="zero-chats-message">You are not a member of any chat, create your own chat or find an already created chat by the chat name</p>
                 </div>
                 <div class="search-results">
-                    <p>Users</p>
-                    <div class="users">
+                    <div class="users-results">
                     </div>
-                    <p>Chats</p>
-                    <div class="chats">
+                    <div class="chats-results">
                     </div>
+                    <p id="nothing-found-text">Nothing found...</p>
                 </div>
             </div>
             <div class="user-settings">
@@ -48,17 +48,18 @@ let ChatPage = {
         <div class="stickers-section">
             <p>Stickers</p>
             <section class="stickers">
-                <img src="resources/img/sticker1.png" alt="sticker1">
-                <img src="resources/img/sticker2.png" alt="sticker2">
-                <img src="resources/img/sticker3.png" alt="sticker3">
-                <img src="resources/img/sticker4.png" alt="sticker4">
-                <img src="resources/img/sticker5.png" alt="sticker5">
-                <img src="resources/img/sticker6.png" alt="sticker6">
-                <img src="resources/img/sticker7.png" alt="sticker7">
-                <img src="resources/img/sticker8.png" alt="sticker8">
-                <img src="resources/img/sticker9.png" alt="sticker9">
-                <img src="resources/img/sticker10.png" alt="sticker10">
-                <img src="resources/img/sticker11.png" alt="sticker11" id="last-sticker">
+                <img src="resources/img/sticker1.png" alt="sticker1" class="sticker">
+                <img src="resources/img/sticker2.png" alt="sticker2" class="sticker">
+                <img src="resources/img/sticker3.png" alt="sticker3" class="sticker">
+                <img src="resources/img/sticker4.png" alt="sticker4" class="sticker">
+                <img src="resources/img/sticker5.png" alt="sticker5" class="sticker">
+                <img src="resources/img/sticker6.png" alt="sticker6" class="sticker">
+                <img src="resources/img/sticker7.png" alt="sticker7" class="sticker">
+                <img src="resources/img/sticker8.png" alt="sticker8" class="sticker">
+                <img src="resources/img/sticker9.png" alt="sticker9" class="sticker">
+                <img src="resources/img/sticker10.png" alt="sticker10" class="sticker">
+                <img src="resources/img/sticker11.png" alt="sticker11" class="sticker">
+                <img src="resources/img/sticker12.jpeg" alt="sticker11" class="sticker">
             </section>
         </div>
     </div>
@@ -140,7 +141,7 @@ let ChatPage = {
                 messageArea.value = "";
                 return;
             }
-            database.setChatMessage(currentUserId, currentChatId.id, message);
+            database.setChatMessage(currentUserId, currentChatId.id, message, "text");
             messageArea.value = "";
         });
 
@@ -206,7 +207,13 @@ let ChatPage = {
         const searchDiv = document.querySelector(".search-results");
         searchDiv.style.display = "none";
         const searchInput = document.getElementById("search");
+        const usersSearchDiv = document.querySelector(".users-results")
+        const chatsSearchDiv = document.querySelector(".chats-results")
         searchInput.addEventListener('input', async function(e) {
+            const notFoundText = document.getElementById("nothing-found-text")
+            notFoundText.style.display = "none"
+            usersSearchDiv.innerHTML = ''
+            chatsSearchDiv.innerHTML = ''
             let val = e.target.value.trim();
             if (val.length) {
                 searchDiv.style.display = "block";
@@ -215,8 +222,22 @@ let ChatPage = {
                 searchDiv.style.display = "none";
                 chatsContainer.style.display = "block";
             }
-            await database.getSearchResults(currentUserId ,val)
+            let searchResults = await database.getSearchResults(currentUserId ,val)
+            if(searchResults.users.length == 0 && searchResults.chats.length == 0){
+                notFoundText.style.display = "block"
+            } else {
+                displaySearchResults(searchResults, usersSearchDiv, chatsSearchDiv)
+            } 
         });
+
+        //clicking on sticker
+        const stickers = document.getElementsByClassName("sticker")
+        for(let sticker of stickers) {
+            sticker.addEventListener("click", async function(e) {
+                e.preventDefault()
+                await database.setChatMessage(currentUserId, currentChatId.id, sticker.src, "sticker")
+            })
+        }
     }
 }
 
