@@ -1,36 +1,55 @@
 import * as elementHelpers from "./elementHelpers.js"
-import {database} from "./db.js"
+import {database, DB} from "./db.js"
+import Utils from "./Utils.js";
 
 export async function handleNewChat(snapshot, chatInfoSection, correspondenceSection, 
     userMessageInput, chatsContainer, startMessagingP, currentChatId) {
     document.getElementById("zero-chats-message").style.display = "none";
     let newChatId = snapshot.val();
-    let newChatInfo = await database.getChatInfo(snapshot.val());
-    let messages = newChatInfo.messages;
+    const newChatInfo = await database.getChatInfo(snapshot.val());
+    
+    let newChatInfoKey = newChatInfo.key
+    let newChatInfoVal = newChatInfo.val()
+
+    let chatName = ""
+    let chatPhoto = ""
+    if(newChatInfoVal.chatType == "dialogue"){
+        Utils.removeElemFromArray(newChatInfoVal.users, firebase.auth().currentUser.uid)
+        const user = await database.getUserById(newChatInfoVal.users[0])
+        chatName = user.username
+        chatPhoto = user.photoLink
+    } else {
+        chatName = newChatInfoVal.chatName
+        chatPhoto = newChatInfoVal.chatPhotoLink
+    }
+
+    let messages = newChatInfoVal.messages;
     let section = document.createElement("section");
     section.classList.add("chat");
     section.setAttribute.disabled = true;
+
+    
     if(messages === undefined){
         section.innerHTML = `
-        <input type="hidden" name="chat-id" value="${newChatId}">
-        <p class="temp-chat-name">${newChatInfo.chatName}</p>
+        <input type="hidden" name="chat-id" value="${newChatInfoKey}">
+        <p class="temp-chat-name">${chatName}</p>
         <p class="temp-last-message">*No messages*</p>
-        <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+        <img src="${chatPhoto}" alt="chat-photo" class="chat-photo">`
     } else {
         let userInfo = await database.getUserInfo(messages[messages.length - 1].userId);
         const lastMessage = messages[messages.length - 1]
         if(lastMessage.messageType == "text"){
             section.innerHTML = `
-            <input type="hidden" name="chat-id" value="${newChatId}">
-            <p class="temp-chat-name">${newChatInfo.chatName}</p>
+            <input type="hidden" name="chat-id" value="${newChatInfoKey}">
+            <p class="temp-chat-name">${chatName}</p>
             <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": " + lastMessage.messageText}</p>
-            <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+            <img src="${chatPhoto}" alt="chat-photo" class="chat-photo">`
         } else {
             section.innerHTML = `
-            <input type="hidden" name="chat-id" value="${newChatId}">
-            <p class="temp-chat-name">${newChatInfo.chatName}</p>
+            <input type="hidden" name="chat-id" value="${newChatInfoKey}">
+            <p class="temp-chat-name">${chatName}</p>
             <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": *sticker*"}</p>
-            <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+            <img src="${chatPhoto}" alt="chat-photo" class="chat-photo">`
         }
     }
     section.addEventListener('click', async (event) => {
@@ -41,16 +60,20 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
         let chatInfo = await database.getChatInfo(newChatId);
         let chatNameP = document.createElement("p");
         chatNameP.id = "chat-name";
-        chatNameP.innerText = newChatInfo.chatName;
+        chatNameP.innerText = chatName;
         let chatImg = document.createElement("img");
-        chatImg.src = newChatInfo.chatPhotoLink;
+        chatImg.src = chatPhoto;
         chatImg.alt = "chat-photo";
         let kindOfChatP = document.createElement("p");
         kindOfChatP.id = "kind-of-chat";
-        kindOfChatP.innerText = newChatInfo.chatType;
+        kindOfChatP.innerText = newChatInfoVal.chatType;
         let membersP = document.createElement("p");
         membersP.id = "users-count";
-        membersP.innerText = chatInfo.membersCount + " members";
+        if(newChatInfoVal.chatType != "dialogue"){
+            membersP.innerText = chatInfo.membersCount + " members";
+        } else {
+            membersP.innerText = "2 members"
+        }
         chatInfoSection.innerHTML = '';
         chatInfoSection.append(chatNameP);
         chatInfoSection.append(chatImg);

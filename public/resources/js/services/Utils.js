@@ -18,6 +18,11 @@ const Utils = {
     ,sleep: (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms))
     }
+
+    ,removeElemFromArray(arr, elem) {
+        const index = arr.indexOf(elem)
+        arr.splice(index, 1)
+    }
 }
 
 export default Utils

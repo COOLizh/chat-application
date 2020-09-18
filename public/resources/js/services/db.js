@@ -29,17 +29,21 @@ export class DB {
         });
     }
 
-    async createChat(userId, chatName, chatType, chatPassword) {
+    async createChat(usersId, chatName, chatType, chatPassword) {
         const newChatId = await firebase.database().ref("/chats").push({
             chatName: chatName,
             chatType: chatType,
             chatPhotoLink: "resources/img/person.png",
             membersCount: 1,
-            password: chatPassword
+            password: chatPassword,
+            users: usersId
         }).then(res => {
             return res.key
         });
-        await this.addUserToChat(userId, newChatId);
+        for(let usrId of usersId){
+            await this.setUserChats(usrId, newChatId)
+        }
+        return newChatId
     }
 
     async getUserChats(userId) {
@@ -61,7 +65,26 @@ export class DB {
         }
     }
 
-    async addUserToChat(userId, chatId) {
+    async getUserChatsUsers(userId) {
+        const snapshot = await firebase.database().ref("/users/" + userId + "/chats").once("value")
+
+        const ids = []
+        if (snapshot.exists()) {
+            for (const id of snapshot.val()) {
+                const chat = await firebase.database().ref("/chats/" + id).once("value")
+                if (chat.val() != null && chat.val().users && chat.val().chatType == "dialogue" 
+                        && chat.val().users.includes(firebase.auth().currentUser.uid)) {
+                    const myIdIndex = chat.val().users.indexOf(firebase.auth().currentUser.uid)
+                    chat.val().users.splice(myIdIndex, 1)
+                    ids.push(chat.val().users[0])
+                }
+            }
+        }
+
+        return ids
+    } 
+
+    async setUserChats(userId, chatId) {
         let snapshot = await firebase.database().ref("/users/" + userId + "/chats").once("value");
         let chats = [];
         if(snapshot.exists()){
@@ -69,6 +92,29 @@ export class DB {
         }
         chats.push(chatId);
         firebase.database().ref("/users/" + userId+ "/chats/").set(chats);
+    }
+
+    async addUserToChat(userId, chatId) {
+        await this.setUserChats(userId, chatId)
+        let chatUsers = await this.getChatUsers(chatId)
+        if (chatUsers != null) {
+            chatUsers.push(userId)
+        } else {
+            chatUsers = [userId]
+        }
+        this.setChatUsers(chatId, chatUsers)
+    }
+
+    setChatUsers(chatId, newUsers) {
+        firebase.database().ref("/chats/" + chatId + "/users").set(newUsers)
+    }
+
+    async getChatUsers(chatId) {
+        const snapshot = await firebase.database().ref("/chats/" + chatId + "/users").once("value")
+        if (snapshot.exists()) {
+            return snapshot.val()
+        }
+        return null
     }
 
     async getChatMessages(chatId) {
@@ -94,12 +140,11 @@ export class DB {
     }
 
     async getChatInfo(chatId){
-        const snapshot = await firebase.database().ref("/chats/" + chatId + "/").once("value");
+        const snapshot = await firebase.database().ref("/chats/" + chatId).once("value");
         if (snapshot.exists()) {
-            return snapshot.val();
-        } else {
-            return null;
+            return snapshot;
         }
+        return null
     }
 
     async newMessageReceived(chatId) {
@@ -119,7 +164,7 @@ export class DB {
     }
 
     async getAllUsers() {
-        const snapshot = await firebase.database().ref("/users/").once("value");
+        const snapshot = await firebase.database().ref("/users").once("value");
         if (snapshot.exists()) {
             return [...Object.keys(snapshot.val()).map(key => ({
                 id: key,
@@ -142,43 +187,58 @@ export class DB {
         }
     }
 
+    async getAllUsersIds() {
+        const snapshot = await firebase.database().ref("/users").once("value")
+        if (snapshot.exists()) {
+            return [...Object.keys(snapshot.val())]
+        }
+        return null
+    }
+    
+    async getUserById(userId) {
+        const snapshot = await firebase.database().ref("/users/" + userId).once("value")
+        if (snapshot.exists) {
+            return snapshot.val()
+        }
+        return null
+    }
+
     async getAllChatsAndUsersWhichUserIsNotMember(userId){
-        const userChats = await firebase.database().ref("/users/" + userId + "/chats").once("value");
+        // const userChats = await firebase.database().ref("/users/" + userId + "/chats").once("value");
+        const allUsersIds = await this.getAllUsersIds()
         const allUsers = await this.getAllUsers()
         const allChats = await this.getAllChats()
+        const userChatsUsers = await this.getUserChatsUsers(firebase.auth().currentUser.uid)
         const users = [];
-        const publicChats = [];
-        const privateChats = [];
-        for(const user of allUsers){
-            if(user.id != userId){
-                const tmpUsr = await this.getUserInfo(user.id);
-                users.push(tmpUsr)
+        const chats = []
+        
+        if (allChats != null) {
+            for (const chat of allChats) {
+                if (!chat[chat.id].users.includes(firebase.auth().currentUser.uid) && chat[chat.id].chatType != "dialogue") {
+                    chats.push({
+                        chat: chat[chat.id],
+                        id: chat.id
+                    })
+                }
             }
         }
-        for(const chat of allChats){
-            let isUserHaveSuchChat = false;
-            if(userChats.val() != null){
-                for(let i = 0; i < userChats.val().length; i++){
-                    if(userChats.val()[i] == chat.id){
-                        isUserHaveSuchChat = true;
-                        break;
-                    }
-                }
-            }
-            if(!isUserHaveSuchChat){
-                const tmpChat = await this.getChatInfo(chat.id);
-                if(tmpChat.chatType == "public"){
-                    publicChats.push(tmpChat);
-                } else {
-                    privateChats.push(tmpChat);
-                }
+
+        console.log(allUsersIds)
+        console.log(allUsers)
+        for (const id of allUsersIds) {
+            if (!userChatsUsers.includes(id) && id != firebase.auth().currentUser.uid) {
+                console.log(id)
+                users.push({
+                    user: await this.getUserById(id),
+                    id: id
+                })
+                console.log(users)
             }
         }
 
         let results = {
             users: users,
-            publicChats: publicChats,
-            privateChats: privateChats
+            chats: chats,
         }
 
         return results
@@ -186,29 +246,20 @@ export class DB {
 
     async getSearchResults(userId, searchString) {
         let users = []
-        let privateChats = []
-        let publicChats = []
+        let chats = []
         let usersAndChats = await this.getAllChatsAndUsersWhichUserIsNotMember(userId)
         for(let usr of usersAndChats.users){
-            if(usr.username.indexOf(searchString) == 0){
+            if(usr.user.username.indexOf(searchString) == 0){
                 users.push(usr);
             }
         }
     
-        for(let cht of usersAndChats.publicChats){
-            if(cht.chatName.indexOf(searchString) == 0){
-                publicChats.push(cht);
-            }
-        }
-    
-        for(let cht of usersAndChats.privateChats){
-            if(cht.chatName.indexOf(searchString) == 0){
-                privateChats.push(cht);
+        for(let cht of usersAndChats.chats){
+            if(cht.chat.chatName.indexOf(searchString) == 0){
+                chats.push(cht);
             }
         }
 
-        let chats = privateChats.concat(publicChats)
-        console.log(chats)
         let result = {
             users: users,
             chats: chats,

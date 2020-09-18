@@ -82,13 +82,15 @@ let ChatPage = {
         </div>
         <div class="enter-password-modal" style="display:none;">
             <input type="text" placeholder="Enter password..." id="input-private-password">
-            <input type="submit" value="Create chat">
+            <input type="submit" value="OK" id="confirm-input-password">
         </div>
         <button class="close" role="button">X</button>
     </div>`
         return view
     },
     after_render: async () => {
+
+        console.log(await database.getAllUsersIds())
 
         //changing title and css
         document.getElementById("css-tag").href = "resources/css/chat.css";
@@ -203,7 +205,7 @@ let ChatPage = {
                 if(chatTypeSelector.value == "private" && chatPasswordInput.value == ""){
                     alert("Password at private chats must be filled")
                 } else {
-                    await database.createChat(currentUserId, chatName, chatType, chatPasswordInput.value);
+                    await database.createChat([currentUserId], chatName, chatType, chatPasswordInput.value);
                     mask.classList.remove("active");
                 } 
             }
@@ -215,6 +217,8 @@ let ChatPage = {
         const searchInput = document.getElementById("search");
         const usersSearchDiv = document.querySelector(".users-results")
         const chatsSearchDiv = document.querySelector(".chats-results")
+        const createChatModal = document.querySelector(".create-chat-modal")
+        const enterPasswordModal = document.querySelector(".enter-password-modal")
         searchInput.addEventListener('input', async function(e) {
             const notFoundText = document.getElementById("nothing-found-text")
             notFoundText.style.display = "none"
@@ -229,10 +233,12 @@ let ChatPage = {
                 chatsContainer.style.display = "block";
             }
             let searchResults = await database.getSearchResults(currentUserId ,val)
+            console.log(searchResults)
             if(searchResults.users.length == 0 && searchResults.chats.length == 0){
                 notFoundText.style.display = "block"
             } else {
-                displaySearchResults(searchResults, usersSearchDiv, chatsSearchDiv)
+                displaySearchResults(searchResults, usersSearchDiv, chatsSearchDiv, searchDiv,
+                    chatsContainer, createChatModal, enterPasswordModal, mask, modal)
             } 
         });
 
