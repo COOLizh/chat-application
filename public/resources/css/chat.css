@@ -146,11 +146,17 @@ body {
 /* search results*/
 
 /* user search results */
+
+.search-results {
+    overflow-y: scroll;
+    overflow-x: none;
+}
+
 .user-search-block {
     display: grid;
     width: 100%;
     height: 20%;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: 33% 33% 33%;
     border: 2px solid black;
     border-top: none;
     border-right: none;
@@ -171,6 +177,14 @@ body {
 #nothing-found-text{
     margin-top: 40%;
     text-align: center;
+}
+
+.join-button {
+    padding: 10px;
+    width: 100%;
+    height: 60px;
+    border-radius: 25px;
+    border: 2px solid crimson;
 }
 
 /* chats */
@@ -511,8 +525,9 @@ body {
     height: 130px;
 }
 
-#last-sticker {
-    height: 120px;
+.sticker:hover{
+    cursor: pointer;
+    background-color: cornflowerblue;
 }
 
 /*-------------- mobiles ---------------*/

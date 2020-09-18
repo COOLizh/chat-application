@@ -18,11 +18,20 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
         <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
     } else {
         let userInfo = await database.getUserInfo(messages[messages.length - 1].userId);
-        section.innerHTML = `
-        <input type="hidden" name="chat-id" value="${newChatId}">
-        <p class="temp-chat-name">${newChatInfo.chatName}</p>
-        <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": " + messages[messages.length - 1].messageText}</p>
-        <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+        const lastMessage = messages[messages.length - 1]
+        if(lastMessage.messageType == "text"){
+            section.innerHTML = `
+            <input type="hidden" name="chat-id" value="${newChatId}">
+            <p class="temp-chat-name">${newChatInfo.chatName}</p>
+            <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": " + lastMessage.messageText}</p>
+            <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+        } else {
+            section.innerHTML = `
+            <input type="hidden" name="chat-id" value="${newChatId}">
+            <p class="temp-chat-name">${newChatInfo.chatName}</p>
+            <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": *sticker*"}</p>
+            <img src="resources/img/unknown_user.png" alt="chat-photo" class="chat-photo">`
+        }
     }
     section.addEventListener('click', async (event) => {
         //filling chat info section

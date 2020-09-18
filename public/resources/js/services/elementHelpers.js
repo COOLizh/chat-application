@@ -42,24 +42,61 @@ export function displaySearchResults(searchResults, usersSearchDiv, chatsSearchD
         usersSearchDiv.appendChild(userBlock)
     }
 
-    for(let usr of searchResults.chats){
-        const userBlock = document.createElement("div")
-        userBlock.classList.add("user-search-block")
-        const userImg = document.createElement("img")
-        userImg.src = usr.photoLink;
-        const userInfoDiv = document.createElement("div")
-        userInfoDiv.classList.add("user-search-info")
-        const username = document.createElement("p")
-        username.innerText = "Chat name: " + usr.chatName
-        const userNameAndSurname = document.createElement("p")
-        userNameAndSurname.innerText = "Type: " + usr.chatType
+    for(let chat of searchResults.chats){
+        const chatBlock = document.createElement("div")
+        chatBlock.classList.add("user-search-block")
+        const chatImg = document.createElement("img")
+        chatImg.src = chat.photoLink;
+        const chatInfoDiv = document.createElement("div")
+        chatInfoDiv.classList.add("user-search-info")
+        const chatName = document.createElement("p")
+        chatName.innerText = "Chat name: " + chat.chatName
+        const chatType = document.createElement("p")
+        chatType.innerText = "Type: " + chat.chatType
+        const joinButton = document.createElement("p")
+        joinButton.classList.add("join-button")
+        joinButton.innerText = "Join"
 
-        userInfoDiv.appendChild(username)
-        userInfoDiv.appendChild(userNameAndSurname)
-        userBlock.appendChild(userImg)
-        userBlock.appendChild(userInfoDiv)
+        chatInfoDiv.appendChild(chatName)
+        chatInfoDiv.appendChild(chatType)
+        chatBlock.appendChild(chatImg)
+        chatBlock.appendChild(chatInfoDiv)
+        chatBlock.append(joinButton)
 
-        chatsSearchDiv.appendChild(userBlock)
+        let mask = document.querySelector(".mask");
+        let modal = document.querySelector(".modal");
+        joinButton.addEventListener("click", async function(e){
+            mask.style.display = "block";
+            modal.style.display = "block";
+            mask.classList.add("active");
+            document.querySelector(".create-chat-modal").style.display = "none"
+            document.querySelector(".enter-password-modal").style.display = "block"
+        })
+        document.querySelector(".close").addEventListener("click", function(e){
+            mask.classList.remove("active");
+        })
+        mask.addEventListener("click", function (e) {
+            mask.classList.remove("active");
+        })
+
+        chatsSearchDiv.appendChild(chatBlock)
     }
 
 }
+
+/* 
+let mask = document.querySelector(".mask");
+        let modal = document.querySelector(".modal");
+        document.querySelector(".username").textContent = currentUserInfo.username;
+        document.querySelector(".create-chat-button").addEventListener("click", function(e) {
+            mask.style.display = "block";
+            modal.style.display = "block";
+            mask.classList.add("active");
+        })
+        document.querySelector(".close").addEventListener("click", function(e){
+            mask.classList.remove("active");
+        })
+        mask.addEventListener("click", function (e) {
+            mask.classList.remove("active");
+        })
+*/

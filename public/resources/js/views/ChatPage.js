@@ -65,19 +65,25 @@ let ChatPage = {
     </div>
     <div class="mask" role="dialog" style="display:none;"></div>
     <div class="modal" role="alert" style="display:none;">
-        <img src="resources/img/unknown_user.png" alt="default chat photo">
-        <p>Change chat photo</p>
-        <div class="chat-info-fields">
-            <div>
-                <input type="text" placeholder="Chat name" class="chat-name-input" required/>
-                <input type="password" placeholder="Password" class="chat-password-input" requiered/>
+        <div class="create-chat-modal">
+            <img src="resources/img/unknown_user.png" alt="default chat photo">
+            <p>Change chat photo</p>
+            <div class="chat-info-fields">
+                <div>
+                    <input type="text" placeholder="Chat name" class="chat-name-input" required/>
+                    <input type="password" placeholder="Password" class="chat-password-input" requiered/>
+                </div>
+                <select class="chat-type-select">
+                    <option value="private">private</option>
+                    <option value="public">public</option>
+                </select>
             </div>
-            <select class="chat-type-select">
-                <option value="private">private</option>
-                <option value="public">public</option>
-            </select>
+            <input type="submit" value="Create chat" class="confirm-create-chat-button">
         </div>
-        <input type="submit" value="Create chat" class="confirm-create-chat-button">
+        <div class="enter-password-modal" style="display:none;">
+            <input type="text" placeholder="Enter password..." id="input-private-password">
+            <input type="submit" value="Create chat">
+        </div>
         <button class="close" role="button">X</button>
     </div>`
         return view
