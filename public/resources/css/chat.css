@@ -407,69 +407,58 @@ body {
     color: white;
 }
 
-.temp-login-user-message {
-    margin: 20px;
-    width: 100%;
-    overflow: hidden;
-}
-
-.temp-login-user-message > span {
-    display: block;
-    float: right;
-    text-align: center;
-    background-color: #24BC21;
-    padding: 15px;
+.user-message {
+    border: 2px solid black;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    float: left;
+    width: 80%;
+    margin-left: 10px;
     border-radius: 25px;
 }
 
-.temp-login-user-message > p {
-    background-color: #346ABC;
+.current {
+    background-color: rgb(64, 197, 52);
+    float: right;
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.user-message::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.user-message img {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+.user-message.current p {
+    float: right;
+}
+
+.user-message.current img {
+    float: right;
+    margin-left: 20px;
+    margin-right:0;
 }
 
 .message-status {
-    float: right;
-    width: 20px;
-    text-align: center;
-    background-color: #346ABC;
-    margin-right: 4%;
-    margin-top: 30px;
-    padding: 0;
-    border-radius: 0;
-    color: #FFFBFB;
-    text-align: center;
+    float: left;
+    color: white;
 }
 
-.temp-login-user-message > img {
-    display: block;
-    float: right;
-    margin-right: 20px;
-    margin-left: 20px;
-    width: 100px;
-    height: 100px;
-}
-
-.temp-other-users-message {
-    margin: 20px;
-    width: 100%;
-    overflow: hidden;
-}
-  
-.temp-other-users-message > span {
-    display: block;
-    float: left;
-    margin-left: 20px;
-    text-align: center;
-    background-color: #FFFBFB;
-    padding: 15px;  
-    border-radius: 25px;
-}
-  
-.temp-other-users-message > img {
-    display: block;
-    float: left;
-    margin-left: 20px;
-    width: 100px;
-    height: 100px;
+.user-message .sended-sticker {
+    max-width: 200px;
+    height: 200px;
 }
 
 #user-typing-indicator {

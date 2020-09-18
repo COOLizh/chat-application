@@ -5,21 +5,26 @@ export function displayUserMessage(userId, message, correspondenceSection, userI
     const userPhoto = document.createElement("img");
     userPhoto.src = userInfo.photoLink;
     userPhoto.classList.add("user-photo");
-    let userMessage = document.createElement("span");
+    let userMessage = document.createElement("p");
     if(messageType == "text"){
         userMessage.innerText = message;
-        userMessage.classList.add("user-message")
     } else {
         userMessage = document.createElement("img")
+        userMessage.classList.add("sended-sticker")
         userMessage.src = message
     }
-    if(userId == firebase.auth().currentUser.uid) {
-        userMessageSection.classList.add("temp-login-user-message");
-    } else {
-        userMessageSection.classList.add("temp-other-users-message");
-    }
     userMessageSection.appendChild(userPhoto);
-    userMessageSection.appendChild(userMessage);
+    userMessageSection.classList.add("user-message")
+    if(userId == firebase.auth().currentUser.uid) {
+        userMessageSection.classList.add("current");
+        const messageStatus = document.createElement("span")
+        messageStatus.classList.add("message-status")
+        messageStatus.innerText = "✔"
+        userMessageSection.appendChild(userMessage);
+        userMessageSection.appendChild(messageStatus);
+    } else {
+        userMessageSection.appendChild(userMessage);
+    }
     correspondenceSection.appendChild(userMessageSection);
 }
 
