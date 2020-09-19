@@ -37,7 +37,9 @@ let ChatPage = {
             </div>
         </div>
         <div class="correspondence-section">
+            <img src="resources/img/blue-arrow.jpg" alt="Stickers" id="stickers-mobile" style="display: none">
             <section id="chat-info">
+                  <img src="resources/img/blue-arrow.jpg" alt="Back to chats" id="back-to-chat-button-mobile" style="display: none">
                   <h2>CoolChat</h2>
                   <img src="resources/img/chat-logo.jpg" alt="CoolChat logo" id="chat-logo">
             </section>
@@ -94,9 +96,6 @@ let ChatPage = {
         return view
     },
     after_render: async () => {
-
-        console.log(await database.getAllUsersIds())
-
         //changing title and css
         document.getElementById("css-tag").href = "resources/css/chat.css";
         document.title = "CoolChat messaging";
@@ -107,8 +106,9 @@ let ChatPage = {
         //cariable for current chat id
         const currentChatId = { id: "" };
 
-        //creating database object to work with database
-        // const database = new DB();
+        //if there is a mobile version make 2 buttons display block
+        document.getElementById("back-to-chat-button-mobile").style.display = "block"
+        //document.getElementById("stickers-mobile").style.display = "block"
 
         //get current user information
         let currentUserInfo = await database.getUserInfo(currentUserId);

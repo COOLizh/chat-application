@@ -55,6 +55,15 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
     section.addEventListener('click', async (event) => {
         //filling chat info section
         event.preventDefault();
+        if(screen.height <= 850) {
+            document.querySelector(".settings-chats-section").style.display = "none"
+            document.querySelector(".correspondence-section").style.display = "block"
+
+            document.getElementById("back-to-chat-button-mobile").addEventListener("click", function(e){
+                document.querySelector(".settings-chats-section").style.display = "block"
+                document.querySelector(".correspondence-section").style.display = "none"
+            })
+        }
         startMessagingP.style.display = "none";
         correspondenceSection.innerHTML = '';
         let chatInfo = await database.getChatInfo(newChatId);

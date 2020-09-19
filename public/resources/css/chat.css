@@ -565,13 +565,16 @@ body {
     /* whole page */
     .page-content {
         display: grid;
-        height: 100%;
-        grid-template-columns: repeat(1, auto);
-        grid-template-rows: repeat(1, auto);
+        grid-template-columns: repeat(1, 100%);
+        border-bottom: 2px solid black;
     }
 
     .chats{
         border-right: 2px solid black;
+        
+        height: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 
     .search-and-settings {
@@ -582,11 +585,36 @@ body {
         display: none;
     }
 
-    .temp-chat-name, .temp-last-message, #temp-chat-name, #temp-last-message {
-        margin-left: 20%;
+    .correspondence-section {
+        overflow: hidden;
     }
 
-    .chat, #temp-selected-chat {
-        border-left: none;
+    #users-count {
+        display: none;
+    }
+
+    #kind-of-chat { 
+        font-size: 18px;
+    }
+
+    #chat-name {
+        font-size: 24px;
+    }
+
+    #chat-info{
+        position: relative;
+    }
+
+    #chat-info > img {
+        width: 67px;
+        height: 57px;
+    }
+
+    #back-to-chat-button-mobile{
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        height: 50px;
+        width: 50px;
     }
 }
