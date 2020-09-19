@@ -206,7 +206,6 @@ let ChatPage = {
         const usernameField = document.querySelector(".username")
         usernameField.value = currentUserInfo.username
         usernameField.disabled = true
-        const editUsername = document.querySelector(".edit-username")
         document.querySelector(".settings").addEventListener("click", function(e) {
             e.preventDefault();
             userChatsSection.style.display = "none";
@@ -350,6 +349,35 @@ let ChatPage = {
                 await database.setChatMessage(currentUserId, currentChatId.id, sticker.src, "sticker")
             })
         }
+        
+        //changing usrname of user
+        let isChangeUsername = false;
+        const changeUsernameButton = document.querySelector(".edit-username")
+        changeUsernameButton.addEventListener("click", async function(e){
+            if(!isChangeUsername){
+                changeUsernameButton.value = "OK"
+                usernameField.disabled = false
+                isChangeUsername = !isChangeUsername;
+            } else {
+                let val = usernameField.value.trim()
+                if(val == currentUserInfo.username){
+                    changeUsernameButton.value = "Edit"
+                    usernameField.disabled = true
+                    isChangeUsername = !isChangeUsername;
+                    return
+                }
+                if(val == ""){
+                    alert("username cannot be empty")
+                } else if(await database.checkValidUsername(val)){
+                    changeUsernameButton.value = "Edit"
+                    usernameField.disabled = true
+                    database.setUserUsername(currentUserId, val)
+                    isChangeUsername = !isChangeUsername;
+                } else {
+                    alert("Already have user with such username")
+                }
+            }
+        })
     }
 }
 

@@ -192,6 +192,20 @@ export class DB {
         }
     }
 
+    async checkValidUsername(username){
+        const allUsers = await this.getAllUsers();
+        for(let usr of allUsers){
+            if(usr[usr.id].username == username){
+                return false
+            }
+        }
+        return true
+    }
+
+    setUserUsername(userId, newUsername){
+        firebase.database().ref("/users/" + userId + "/username").set(newUsername)
+    }
+
     async getAllChats() {
         const snapshot = await firebase.database().ref("/chats").once("value");
         if (snapshot.exists()) {
