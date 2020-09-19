@@ -25,9 +25,14 @@ let ChatPage = {
             </div>
             <div class="user-settings">
                 <img src="resources/img/blue-arrow.jpg" alt="Back to chats" id="back-to-chat-button">
-                <p class="username"></p>
+                <p class="name-and-surname"></p>
                 <img src="resources/img/unknown_male.png" alt="user-photo" id="user-photo">
                 <p id="change-photo-button">Change photo</p>
+                <div class="change-username">
+                    <p>Username: </p>
+                    <input type="text" size="40" class="username">
+                    <input type="submit" value="Edit" class="edit-username">
+                </div>
                 <p class="create-chat-button">Create chat</p>
             </div>
         </div>
@@ -157,11 +162,18 @@ let ChatPage = {
         const userChatsSection = document.querySelector(".user-chats");
         const userSettingsSection = document.querySelector(".user-settings");
         const backToChatButton = document.getElementById("back-to-chat-button");
-        
+        const nameAndSurname = document.querySelector(".name-and-surname")
+        nameAndSurname.innerText = currentUserInfo.name + " " + currentUserInfo.surname
+        const usernameField = document.querySelector(".username")
+        usernameField.value = currentUserInfo.username
+        usernameField.disabled = true
+        const editUsername = document.querySelector(".edit-username")
         document.querySelector(".settings").addEventListener("click", function(e) {
             e.preventDefault();
             userChatsSection.style.display = "none";
             userSettingsSection.style.display = "block";
+
+            
         });
         backToChatButton.addEventListener("click", function(e) {
             e.preventDefault();

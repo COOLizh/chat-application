@@ -115,15 +115,22 @@ body {
     background-color: white;
 }
 
-.user-settings > p {
+.user-settings > p.create-chat-button {
     margin: auto;
     font-size: 36px;
     border: 2px solid #346ABC;
+    margin: 10%;
+    margin-bottom: 0;
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.user-settings > p.name-and-surname {
+    font-size: 36px;
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 20%;
-    padding: 10px;
-    border-radius: 20px;
     text-align: center;
 }
 
@@ -141,6 +148,26 @@ body {
     padding: none;
     border-radius: none;
     text-align: center;
+}
+
+.change-username {
+    display: grid;
+    grid-template-columns: repeat(3, 33%);
+    grid-column-gap: 3%;
+    margin-top: 8%;
+}
+
+.change-username > p {
+    font-size: 24px;
+    text-align: center;
+}
+
+.change-username input{
+    font-size: 24px;
+}
+
+.change-username > input.edit-username {
+    width: 60%;
 }
 
 /* search results*/
