@@ -147,11 +147,10 @@ export class DB {
         return null
     }
 
-    async newMessageReceived(chatId) {
-        await firebase.database().ref("/chats/" + chatId + "/messages").on('child_changed', function(snapshot) {
-            
+    newMessageReceived(chatId) {
+        firebase.database().ref("/chats/" + chatId + "/messages").on('child_changed', function(snapshot) {
             console.log(snapshot.name(), snapshot.val());
-         });
+        });
     }
 
     async getUserInfo(userId) {
@@ -265,6 +264,24 @@ export class DB {
             chats: chats,
         }
         return result
+    }
+
+    async setUserAvatar(userId, fileData) {
+        const imgUrl = await firebase.storage().ref("/avatars").child(userId).put(fileData.file, fileData.metadata)
+            .then(snapshot => {
+                return snapshot.ref.getDownloadURL()
+                    .then(url => {
+                        return url
+                    })
+            .catch(err => {
+                alert(err)
+                return null
+            })
+        })
+
+        if (imgUrl != null) {
+            firebase.database().ref("/users/" + userId + "/photoLink").set(imgUrl)
+        }
     }
 }
 

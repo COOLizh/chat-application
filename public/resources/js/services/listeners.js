@@ -55,17 +55,28 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
     section.addEventListener('click', async (event) => {
         //filling chat info section
         event.preventDefault();
-        if(screen.height <= 850) {
-            document.querySelector(".settings-chats-section").style.display = "none"
-            document.querySelector(".correspondence-section").style.display = "block"
 
-            document.getElementById("back-to-chat-button-mobile").addEventListener("click", function(e){
+        
+        startMessagingP.style.display = "none";
+        correspondenceSection.innerHTML = '';
+
+        //for mobiles creating 2 buttons
+        if(screen.width <= 767) {
+            const corresp = document.querySelector(".correspondence-section")
+            const backToChatMobile = document.createElement("img")
+            backToChatMobile.src = "resources/img/blue-arrow.jpg"
+            backToChatMobile.alt = "back to chat"
+            backToChatMobile.id = "back-to-chat-button-mobile"
+            document.querySelector(".settings-chats-section").style.display = "none"
+            corresp.style.display = "block"
+            corresp.appendChild(backToChatMobile)
+
+            backToChatMobile.addEventListener("click", function(e){
                 document.querySelector(".settings-chats-section").style.display = "block"
                 document.querySelector(".correspondence-section").style.display = "none"
             })
         }
-        startMessagingP.style.display = "none";
-        correspondenceSection.innerHTML = '';
+
         let chatInfo = await database.getChatInfo(newChatId);
         let chatNameP = document.createElement("p");
         chatNameP.id = "chat-name";

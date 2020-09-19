@@ -27,7 +27,13 @@ let ChatPage = {
                 <img src="resources/img/blue-arrow.jpg" alt="Back to chats" id="back-to-chat-button">
                 <p class="name-and-surname"></p>
                 <img src="resources/img/unknown_male.png" alt="user-photo" id="user-photo">
-                <p id="change-photo-button">Change photo</p>
+                <div class="input_file">
+                    <label for="file" class="file_label">
+                        <i class="fa fa-upload" aria-hidden="true"></i>
+                        Select Your Photo
+                    </label>
+                    <input id="file" type="file" name="file" multiple />
+                </div>
                 <div class="change-username">
                     <p>Username: </p>
                     <input type="text" size="40" class="username">
@@ -39,7 +45,6 @@ let ChatPage = {
         <div class="correspondence-section">
             <img src="resources/img/blue-arrow.jpg" alt="Stickers" id="stickers-mobile" style="display: none">
             <section id="chat-info">
-                  <img src="resources/img/blue-arrow.jpg" alt="Back to chats" id="back-to-chat-button-mobile" style="display: none">
                   <h2>CoolChat</h2>
                   <img src="resources/img/chat-logo.jpg" alt="CoolChat logo" id="chat-logo">
             </section>
@@ -106,8 +111,6 @@ let ChatPage = {
         //cariable for current chat id
         const currentChatId = { id: "" };
 
-        //if there is a mobile version make 2 buttons display block
-        document.getElementById("back-to-chat-button-mobile").style.display = "block"
         //document.getElementById("stickers-mobile").style.display = "block"
 
         //get current user information
@@ -142,6 +145,11 @@ let ChatPage = {
                     correspondenceSection
                 )
             })
+        })
+
+        const userPhoto = document.getElementById("user-photo")
+        firebase.database().ref("/users/" + firebase.auth().currentUser.uid + "/photoLink").on("value", (snapshot) => {
+            userPhoto.src = snapshot.val()
         })
 
         //when user press enter, message will be send
@@ -253,6 +261,19 @@ let ChatPage = {
                     chatsContainer, createChatModal, enterPasswordModal, mask, modal)
             } 
         });
+
+        const avatarInput = document.getElementById("file")
+        avatarInput.addEventListener("change", async (event) => {
+            event.preventDefault()
+
+            const file = avatarInput.files[0]
+            const userId = firebase.auth().currentUser.uid
+            const metadata = {
+                contentType: file.type
+            }
+
+            await database.setUserAvatar(userId, {file: file, metadata: metadata})
+        })
 
         //clicking on sticker
         const stickers = document.getElementsByClassName("sticker")
