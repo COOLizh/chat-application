@@ -32,7 +32,7 @@ export class DB {
     async createChat(usersId, chatName, chatType, chatPassword, chatImgFile) {
         let imgUrl = "resources/img/person.png"
         if (chatImgFile) {
-            const fileId = chatImgFile.file.name + "-id"
+            const fileId = '_' + Math.random().toString(36).substr(2, 9) + "-id"
             imgUrl = await firebase.storage().ref("/chats").child(fileId).put(chatImgFile.file, chatImgFile.metadata)
                 .then(snapshot => {
                     return snapshot.ref.getDownloadURL()

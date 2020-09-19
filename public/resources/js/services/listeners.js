@@ -56,13 +56,8 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
         //filling chat info section
         event.preventDefault();
 
-        
         startMessagingP.style.display = "none";
         correspondenceSection.innerHTML = '';
-        // const userTypingIndicator = document.createElement("p")
-        // userTypingIndicator.id = "user-is-typing-indicator"
-        // document.querySelector(".page-content").appendChild(userTypingIndicator)
-        // // correspondenceSection.appendChild(userTypingIndicator)
 
         //for mobiles creating 2 buttons
         if(screen.width <= 767) {
@@ -74,6 +69,25 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
             document.querySelector(".settings-chats-section").style.display = "none"
             corresp.style.display = "block"
             corresp.appendChild(backToChatMobile)
+
+            const stickersMobileButton = document.getElementById("stickers-mobile")
+            stickersMobileButton.style.display = "block"
+            const stickersModal = document.querySelector(".stickers-mobile-modal")
+            let mask = document.querySelector(".mask");
+            let modal = document.querySelector(".modal");
+            stickersMobileButton.addEventListener("click", function(e){
+                mask.style.display = "block";
+                modal.style.display = "block";
+                mask.classList.add("active");
+                document.querySelector(".create-chat-modal").style.display = "none"
+                stickersModal.style.display = "block"
+            })
+            document.querySelector(".close").addEventListener("click", function(e){
+                mask.classList.remove("active");
+            })
+            mask.addEventListener("click", function (e) {
+                mask.classList.remove("active");
+            })
 
             backToChatMobile.addEventListener("click", function(e){
                 document.querySelector(".settings-chats-section").style.display = "block"

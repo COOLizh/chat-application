@@ -1,6 +1,6 @@
 import {database} from "../services/db.js"
 
-export function displayUserMessage(userId, message, correspondenceSection, userInfo, messageType) {
+export function displayUserMessage(userId, message, correspondenceSection, userInfo, messageType, container) {
     const userMessageSection = document.createElement("section");
     const userPhoto = document.createElement("img");
     userPhoto.src = userInfo.photoLink;
@@ -26,6 +26,7 @@ export function displayUserMessage(userId, message, correspondenceSection, userI
         userMessageSection.appendChild(userMessage);
     }
     correspondenceSection.appendChild(userMessageSection);
+    container.scrollTop = container.scrollHeight;
 }
 
 export function displaySearchResults(searchResults, usersSearchDiv, chatsSearchDiv,

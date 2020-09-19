@@ -20,6 +20,10 @@ body {
 	font-size: 30px;
 }
 
+img {
+    border-radius: 100px;
+}
+
 /* whole page */
 .page-content {
     display: grid;
@@ -295,7 +299,7 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 400px;
+    width: 320px;
     height: 300px;
     margin-left: -200px;
     margin-top: -150px;
@@ -442,10 +446,10 @@ body {
 
 #user-is-typing-indicator{
     position: absolute;
-    top: 0;
-    right: 20px;
-    font-size: 18px;
-    color: #346ABC;
+    right: 0;
+    top: -25px;
+    font-size: 22px;
+    color: gold;
 }
 
 #start-correspondence-text {
@@ -610,7 +614,6 @@ body {
 /*-------------- mobiles ---------------*/
 
 @media screen and (max-width: 767px) {
-
     /* whole page */
     .page-content {
         display: grid;
@@ -666,5 +669,40 @@ body {
         top: 5px;
         height: 50px;
         width: 50px;
+    }
+
+    .user-settings > p.name-and-surname {
+        margin-top: 7%;
+    }
+
+    #user-is-typing-indicator{
+        font-size: 18px;
+    }
+
+    #stickers-mobile{
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .stickers-mobile-modal{
+        display: grid;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: repeat(6, auto);
+        width: 280px;
+        height: 100%;
+    }
+
+    .stickers-mobile-modal > img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .modal {
+        left: 62%;
     }
 }

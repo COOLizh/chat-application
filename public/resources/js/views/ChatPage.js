@@ -43,7 +43,6 @@ let ChatPage = {
             </div>
         </div>
         <div class="correspondence-section">
-            <img src="resources/img/blue-arrow.jpg" alt="Stickers" id="stickers-mobile" style="display: none">
             <section id="chat-info">
                   <h2>CoolChat</h2>
                   <img src="resources/img/chat-logo.jpg" alt="CoolChat logo" id="chat-logo">
@@ -56,6 +55,7 @@ let ChatPage = {
             <div class="text-area">
                 <p id="user-is-typing-indicator"></p>
                 <input type="text" name="message" id="message" placeholder="Enter message..." disabled>
+                <img src="resources/img/smile.jpg" alt="Stickers" id="stickers-mobile" style="display: none">
             </div>
         </div>
         <div class="stickers-section">
@@ -103,6 +103,20 @@ let ChatPage = {
             <input type="text" placeholder="Enter password..." id="input-private-password">
             <input type="submit" value="OK" id="confirm-input-password">
         </div>
+        <div class="stickers-mobile-modal" style="display: none;">
+            <img src="resources/img/sticker1.png" alt="sticker1" class="sticker">
+            <img src="resources/img/sticker2.png" alt="sticker2" class="sticker">
+            <img src="resources/img/sticker3.png" alt="sticker3" class="sticker">
+            <img src="resources/img/sticker4.png" alt="sticker4" class="sticker">
+            <img src="resources/img/sticker5.png" alt="sticker5" class="sticker">
+            <img src="resources/img/sticker6.png" alt="sticker6" class="sticker">
+            <img src="resources/img/sticker7.png" alt="sticker7" class="sticker">
+            <img src="resources/img/sticker8.png" alt="sticker8" class="sticker">
+            <img src="resources/img/sticker9.png" alt="sticker9" class="sticker">
+            <img src="resources/img/sticker10.png" alt="sticker10" class="sticker">
+            <img src="resources/img/sticker11.png" alt="sticker11" class="sticker">
+            <img src="resources/img/sticker12.jpeg" alt="sticker11" class="sticker">
+        </div>
         <button class="close" role="button">X</button>
     </div>`
         return view
@@ -149,7 +163,8 @@ let ChatPage = {
                 await listeners.handleNewMessage(
                     snapshot, 
                     currentChatId, 
-                    correspondenceSection
+                    correspondenceSection,
+                    dociment.querySelector(".container")
                 )
             })
 
@@ -251,11 +266,10 @@ let ChatPage = {
             }
         })
 
+        //creating and previewing chat avatar
         const createChatForm = document.querySelector(".create-chat-modal")
         const imgPreview = document.getElementById("create-chat-photo")
         const selectChatAvatar = document.getElementById("file_chat")
-
-        console.log(selectChatAvatar)
 
         selectChatAvatar.addEventListener("change", (event) => {
             event.preventDefault()
@@ -267,13 +281,12 @@ let ChatPage = {
                 }
                 fr.readAsDataURL(files[0])
             } else {
-                alert("Govno")
+                alert("Try again to download photo")
             }
         })
 
         createChatForm.addEventListener("submit", async function(e){
             e.preventDefault()
-            console.log("submitting")
             let chatName = document.querySelector(".chat-name-input").value;
             let chatType = chatTypeSelector.value;
             const file = selectChatAvatar.files[0]
@@ -334,9 +347,6 @@ let ChatPage = {
         const avatarInput = document.getElementById("file")
         avatarInput.addEventListener("change", async (event) => {
             event.preventDefault()
-
-            console.log("avatarInput")
-
             const file = avatarInput.files[0]
             const userId = firebase.auth().currentUser.uid
             const metadata = {
@@ -352,6 +362,7 @@ let ChatPage = {
             sticker.addEventListener("click", async function(e) {
                 e.preventDefault()
                 await database.setChatMessage(currentUserId, currentChatId.id, sticker.src, "sticker")
+                mask.classList.remove("active");
             })
         }
         
