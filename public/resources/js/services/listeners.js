@@ -59,6 +59,9 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
         
         startMessagingP.style.display = "none";
         correspondenceSection.innerHTML = '';
+        const userTypingIndicator = document.createElement("p")
+        userTypingIndicator.id = "user-is-typing-indicator"
+        correspondenceSection.appendChild(userTypingIndicator)
 
         //for mobiles creating 2 buttons
         if(screen.width <= 767) {

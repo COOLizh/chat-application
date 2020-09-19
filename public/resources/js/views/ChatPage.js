@@ -151,6 +151,16 @@ let ChatPage = {
                     correspondenceSection
                 )
             })
+
+            firebase.database().ref("/chats/" + snapshot.val() + "/typingUser").on("value", (username) => {
+                if (username.ref.path.pieces_[1] == currentChatId.id && username.val() != currentUserInfo.username) {
+                    if (username.val() != "") {
+                        document.getElementById("user-is-typing-indicator").innerText = username.val() + " is typing"
+                    } else {
+                        document.getElementById("user-is-typing-indicator").innerText = ""
+                    }
+                }
+            }) 
         })
 
         const userPhoto = document.getElementById("user-photo")
@@ -159,17 +169,32 @@ let ChatPage = {
         })
 
         //when user press enter, message will be send
-        window.addEventListener ("keypress", function (e) {
-            if (e.keyCode !== 13) return;
-            const [block, messageArea] = [...document.querySelectorAll(".correspondence, #message")];
-            let message = messageArea.value;
-            message = message.trim();
-            if(message == ""){
+        const messageArea = document.getElementById("message");
+        messageArea.addEventListener ("input", async function (e) {
+            if (e.keyCode !== 13)  {
+                const text = e.target.value.trim()
+                const chatId = currentChatId.id
+
+                await firebase.database().ref("/chats/" + chatId + "/typingUser").set(currentUserInfo.username)
+
+                let timer = setTimeout(async () => {
+                    console.log()
+                    if (e.target.value.trim() == text) {
+                        await firebase.database().ref("/chats/" + chatId + "/typingUser").set("")
+                    } else {
+                        clearTimeout(timer)
+                    }
+                }, 1000)
+            } else {
+                let message = messageArea.value;
+                message = message.trim();
+                if(message == ""){
+                    messageArea.value = "";
+                    return;
+                }
+                database.setChatMessage(currentUserId, currentChatId.id, message, "text");
                 messageArea.value = "";
-                return;
             }
-            database.setChatMessage(currentUserId, currentChatId.id, message, "text");
-            messageArea.value = "";
         });
 
         //when user press ☰, it will open to user settings button
@@ -230,7 +255,6 @@ let ChatPage = {
 
         selectChatAvatar.addEventListener("change", (event) => {
             event.preventDefault()
-            console.log("[ei")
             const files = event.target.files
             if (FileReader&& files && files.length) {
                 const fr = new FileReader()
@@ -249,10 +273,16 @@ let ChatPage = {
             let chatName = document.querySelector(".chat-name-input").value;
             let chatType = chatTypeSelector.value;
             const file = selectChatAvatar.files[0]
-            const metadata = {
-                contentType: file.type
+            let fileData
+            if(file){
+                const metadata = {
+                    contentType: file.type
+                }
+                fileData = {file: file, metadata: metadata}
+            } else {
+                fileData = null
             }
-            const fileData = {file: file, metadata: metadata}
+
             chatName.trim();
             if(chatName == "") {
                 alert("Chat name must be filled")

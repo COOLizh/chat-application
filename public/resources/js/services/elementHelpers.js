@@ -69,7 +69,7 @@ export function displaySearchResults(searchResults, usersSearchDiv, chatsSearchD
         const chatBlock = document.createElement("div")
         chatBlock.classList.add("user-search-block")
         const chatImg = document.createElement("img")
-        chatImg.src = cht.chat.photoLink;
+        chatImg.src = cht.chat.chatPhotoLink;
         const chatInfoDiv = document.createElement("div")
         chatInfoDiv.classList.add("user-search-info")
         const chatName = document.createElement("p")

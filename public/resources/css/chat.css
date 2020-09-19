@@ -439,6 +439,14 @@ body {
     height: 100%;
 }
 
+#user-is-typing-indicator{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    font-size: 18px;
+    color: white;
+}
+
 #start-correspondence-text {
     position: absolute;
     top: 50%;

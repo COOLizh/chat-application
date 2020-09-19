@@ -52,7 +52,8 @@ export class DB {
             chatPhotoLink: imgUrl,
             membersCount: 1,
             password: chatPassword,
-            users: usersId
+            users: usersId,
+            typingUser: ""
         }).then(res => {
             return res.key
         });
@@ -230,11 +231,14 @@ export class DB {
         
         if (allChats != null) {
             for (const chat of allChats) {
-                if (!chat[chat.id].users.includes(firebase.auth().currentUser.uid) && chat[chat.id].chatType != "dialogue") {
-                    chats.push({
-                        chat: chat[chat.id],
-                        id: chat.id
-                    })
+                console.log(firebase.auth().currentUser.uid)
+                if(chat[chat.id].users !== undefined){
+                    if (!chat[chat.id].users.includes(firebase.auth().currentUser.uid) && chat[chat.id].chatType != "dialogue") {
+                        chats.push({
+                            chat: chat[chat.id],
+                            id: chat.id
+                        })
+                    }
                 }
             }
         }
