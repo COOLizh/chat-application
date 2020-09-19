@@ -432,6 +432,7 @@ body {
     background-color: #346ABC;
     overflow-y: scroll;
     overflow-x: hidden;
+    position: relative;
 }
 
 .correspondence {
@@ -441,10 +442,10 @@ body {
 
 #user-is-typing-indicator{
     position: absolute;
-    bottom: 0;
-    left: 50%;
+    top: 0;
+    right: 20px;
     font-size: 18px;
-    color: white;
+    color: #346ABC;
 }
 
 #start-correspondence-text {
@@ -516,6 +517,10 @@ body {
     height: 35px;
     color: #FFFBFB;
     font-size: 24px;
+}
+
+.text-area {
+    position: relative;
 }
 
 .text-area > input {
@@ -639,15 +644,15 @@ body {
     }
 
     #kind-of-chat { 
-        font-size: 18px;
+        font-size: 28px;
     }
 
     #chat-name {
-        font-size: 24px;
+        font-size: 32px;
     }
 
     #chat-info{
-        padding-left: 40%;
+        padding-left: 20%;
     }
 
     #chat-info > img {

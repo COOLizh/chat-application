@@ -53,9 +53,10 @@ let ChatPage = {
                     <p id="start-correspondence-text">Select chat to start messaging...</p>
                 </div>
             </div>
-            <section class="text-area">
+            <div class="text-area">
+                <p id="user-is-typing-indicator"></p>
                 <input type="text" name="message" id="message" placeholder="Enter message..." disabled>
-            </section>
+            </div>
         </div>
         <div class="stickers-section">
             <p>Stickers</p>
@@ -153,9 +154,13 @@ let ChatPage = {
             })
 
             firebase.database().ref("/chats/" + snapshot.val() + "/typingUser").on("value", (username) => {
+                console.log(username.val())
+                console.log(currentUserInfo.username)
+                console.log(username.ref.path.pieces_[1])
+                console.log(currentChatId.id)
                 if (username.ref.path.pieces_[1] == currentChatId.id && username.val() != currentUserInfo.username) {
                     if (username.val() != "") {
-                        document.getElementById("user-is-typing-indicator").innerText = username.val() + " is typing"
+                        document.getElementById("user-is-typing-indicator").innerText = username.val() + " is typing..."
                     } else {
                         document.getElementById("user-is-typing-indicator").innerText = ""
                     }
@@ -169,9 +174,9 @@ let ChatPage = {
         })
 
         //when user press enter, message will be send
-        const messageArea = document.getElementById("message");
-        messageArea.addEventListener ("input", async function (e) {
-            if (e.keyCode !== 13)  {
+        const textArea = document.querySelector(".text-area")
+        userMessageInput.addEventListener("keyup", async function (e) {
+            if (e.key !== 'Enter')  {
                 const text = e.target.value.trim()
                 const chatId = currentChatId.id
 
@@ -186,14 +191,14 @@ let ChatPage = {
                     }
                 }, 1000)
             } else {
-                let message = messageArea.value;
+                let message = userMessageInput.value;
                 message = message.trim();
                 if(message == ""){
-                    messageArea.value = "";
+                    messageInput.value = "";
                     return;
                 }
                 database.setChatMessage(currentUserId, currentChatId.id, message, "text");
-                messageArea.value = "";
+                userMessageInput.value = "";
             }
         });
 
