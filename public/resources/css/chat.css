@@ -560,7 +560,7 @@ body {
 
 /* download photo */
 
-#file {  display: none}
+#file, #file_chat {  display: none}
 
 .input_file{
     margin: auto;

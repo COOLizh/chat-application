@@ -29,11 +29,27 @@ export class DB {
         });
     }
 
-    async createChat(usersId, chatName, chatType, chatPassword) {
+    async createChat(usersId, chatName, chatType, chatPassword, chatImgFile) {
+        let imgUrl = "resources/img/person.png"
+        if (chatImgFile) {
+            const fileId = chatImgFile.file.name + "-id"
+            imgUrl = await firebase.storage().ref("/chats").child(fileId).put(chatImgFile.file, chatImgFile.metadata)
+                .then(snapshot => {
+                    return snapshot.ref.getDownloadURL()
+                        .then(url => {
+                            return url
+                        })
+                .catch(err => {
+                    alert(err)
+                    return null
+                })
+            })
+        }
+
         const newChatId = await firebase.database().ref("/chats").push({
             chatName: chatName,
             chatType: chatType,
-            chatPhotoLink: "resources/img/person.png",
+            chatPhotoLink: imgUrl,
             membersCount: 1,
             password: chatPassword,
             users: usersId
@@ -149,6 +165,7 @@ export class DB {
 
     newMessageReceived(chatId) {
         firebase.database().ref("/chats/" + chatId + "/messages").on('child_changed', function(snapshot) {
+
             console.log(snapshot.name(), snapshot.val());
         });
     }

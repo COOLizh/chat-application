@@ -56,7 +56,7 @@ export function displaySearchResults(searchResults, usersSearchDiv, chatsSearchD
         userBlock.appendChild(joinButton)
 
         joinButton.addEventListener("click", async function(e){
-            const newDialogueId = await database.createChat([firebase.auth().currentUser.uid, usr.id], "", "dialogue", "")
+            const newDialogueId = await database.createChat([firebase.auth().currentUser.uid, usr.id], "", "dialogue", "", null)
             alert("succesfully created dialogue")
             searchDiv.style.display = "none";
             chatsContainer.style.display = "block";

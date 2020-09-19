@@ -26,13 +26,13 @@ let ChatPage = {
             <div class="user-settings">
                 <img src="resources/img/blue-arrow.jpg" alt="Back to chats" id="back-to-chat-button">
                 <p class="name-and-surname"></p>
-                <img src="resources/img/unknown_male.png" alt="user-photo" id="user-photo">
+                <img src="resources/img/unknown_male.png" class="profile-photo" alt="user-photo" id="user-photo">
                 <div class="input_file">
                     <label for="file" class="file_label">
                         <i class="fa fa-upload" aria-hidden="true"></i>
                         Select Your Photo
                     </label>
-                    <input id="file" type="file" name="file" multiple />
+                    <input id="file" name="file" type="file">
                 </div>
                 <div class="change-username">
                     <p>Username: </p>
@@ -77,9 +77,15 @@ let ChatPage = {
     </div>
     <div class="mask" role="dialog" style="display:none;"></div>
     <div class="modal" role="alert" style="display:none;">
-        <div class="create-chat-modal">
-            <img src="resources/img/unknown_user.png" alt="default chat photo">
-            <p>Change chat photo</p>
+        <form class="create-chat-modal">
+            <img src="resources/img/unknown_user.png" alt="default chat photo" id="create-chat-photo">
+            <div class="input_file">
+                <label for="file_chat" class="file_label">
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    Select Chat Photo
+                </label>
+                <input id="file_chat" type="file" name="file">
+            </div>
             <div class="chat-info-fields">
                 <div>
                     <input type="text" placeholder="Chat name" class="chat-name-input" required/>
@@ -91,7 +97,7 @@ let ChatPage = {
                 </select>
             </div>
             <input type="submit" value="Create chat" class="confirm-create-chat-button">
-        </div>
+        </form>
         <div class="enter-password-modal" style="display:none;">
             <input type="text" placeholder="Enter password..." id="input-private-password">
             <input type="submit" value="OK" id="confirm-input-password">
@@ -215,9 +221,38 @@ let ChatPage = {
                 chatPasswordInput.style.display = "block";
             }
         })
-        document.querySelector(".confirm-create-chat-button").addEventListener("click", async function(e){
+
+        const createChatForm = document.querySelector(".create-chat-modal")
+        const imgPreview = document.getElementById("create-chat-photo")
+        const selectChatAvatar = document.getElementById("file_chat")
+
+        console.log(selectChatAvatar)
+
+        selectChatAvatar.addEventListener("change", (event) => {
+            event.preventDefault()
+            console.log("[ei")
+            const files = event.target.files
+            if (FileReader&& files && files.length) {
+                const fr = new FileReader()
+                fr.onload = function () {
+                    imgPreview.src = fr.result
+                }
+                fr.readAsDataURL(files[0])
+            } else {
+                alert("Govno")
+            }
+        })
+
+        createChatForm.addEventListener("submit", async function(e){
+            e.preventDefault()
+            console.log("submitting")
             let chatName = document.querySelector(".chat-name-input").value;
             let chatType = chatTypeSelector.value;
+            const file = selectChatAvatar.files[0]
+            const metadata = {
+                contentType: file.type
+            }
+            const fileData = {file: file, metadata: metadata}
             chatName.trim();
             if(chatName == "") {
                 alert("Chat name must be filled")
@@ -225,7 +260,7 @@ let ChatPage = {
                 if(chatTypeSelector.value == "private" && chatPasswordInput.value == ""){
                     alert("Password at private chats must be filled")
                 } else {
-                    await database.createChat([currentUserId], chatName, chatType, chatPasswordInput.value);
+                    await database.createChat([currentUserId], chatName, chatType, chatPasswordInput.value, fileData);
                     mask.classList.remove("active");
                 } 
             }
@@ -265,6 +300,8 @@ let ChatPage = {
         const avatarInput = document.getElementById("file")
         avatarInput.addEventListener("change", async (event) => {
             event.preventDefault()
+
+            console.log("avatarInput")
 
             const file = avatarInput.files[0]
             const userId = firebase.auth().currentUser.uid
