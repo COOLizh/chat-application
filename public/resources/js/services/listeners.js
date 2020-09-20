@@ -92,8 +92,9 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
         kindOfChatP.innerText = newChatInfoVal.chatType;
         let membersP = document.createElement("p");
         membersP.id = "users-count";
+        console.log(chatInfo)
         if(newChatInfoVal.chatType != "dialogue"){
-            membersP.innerText = chatInfo.membersCount + " members";
+            membersP.innerText = chatInfo.val().users.length + " members";
         } else {
             membersP.innerText = "2 members"
         }
