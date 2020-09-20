@@ -300,7 +300,7 @@ img {
     top: 50%;
     left: 50%;
     width: 320px;
-    height: 300px;
+    height: 350px;
     margin-left: -200px;
     margin-top: -150px;
     background: white;
@@ -323,23 +323,17 @@ img {
     transform: translateY(0);
 }
 
-.modal > img {
+.create-chat-modal> img {
     display: block;
     margin: auto;
     width: 100px;
     height: 100px;
 }
 
-.modal > p{
+.create-chat-modal > p{
     text-align: center;
     font-size: 18px;
     text-decoration: underline;
-}
-
-.modal > p:hover{
-    color: #346ABC;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 .chat-info-fields {
@@ -349,7 +343,7 @@ img {
     grid-template-columns: 70% 30%;
 }
 
-.modal > input.confirm-create-chat-button {
+.create-chat-modal > input.confirm-create-chat-button {
     width: 100%;
     background-color:  black;
     color:  white;
@@ -358,10 +352,19 @@ img {
     height: 16%;
 }
 
+.create-chat-modal > input {
+    width: 100%;
+    background-color:  white;
+    color:  black;
+    font-size: 28px;
+    margin-top: 10px;
+    height: 16%;
+}
+
 .chat-type-select {
     display: block;
-    height: 40%;
-    margin-top: 3%;
+    height: 60%;
+    margin-top: 30%;
     font-size: 18px;
     width: 100%;
 }
@@ -591,10 +594,10 @@ img {
     margin: 20px, auto;
     font-size: 20px;
     font-family: Arial;
-    width: 250px;
+    width: 80%;
     height: 40px;
     line-height: 40px;
-    background-color: #346ABC;
+    background-color: #000000;
     color: #FFF;
     text-align: center;
     padding: 5px;
@@ -604,7 +607,7 @@ img {
 }
 
 .file_label:hover {
-    background-color: #2d70db;
+    background-color: #6b788d;
     color: #ffffff;
 }
 .fa {
@@ -648,10 +651,15 @@ img {
 
     #kind-of-chat { 
         font-size: 28px;
+        grid-column-start: 3;
+        grid-column-end: 4;
+        margin-right: 20px;
     }
 
     #chat-name {
         font-size: 32px;
+        justify-self: end;
+        margin-right: 20px;
     }
 
     #chat-info{
@@ -661,6 +669,7 @@ img {
     #chat-info > img {
         width: 67px;
         height: 57px;
+        justify-self: center;
     }
 
     #back-to-chat-button-mobile{
@@ -704,5 +713,9 @@ img {
 
     .modal {
         left: 62%;
+    }
+
+    .temp-chat-name, .temp-last-message{
+        margin-left: 40%;
     }
 }

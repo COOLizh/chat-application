@@ -1,6 +1,7 @@
 import {database} from "../services/db.js"
 import { displaySearchResults } from "../services/elementHelpers.js"
 import * as listeners from "../services/listeners.js"
+import Router from "../router.js"
 
 // SPA
 let ChatPage = {
@@ -83,7 +84,7 @@ let ChatPage = {
             <div class="input_file">
                 <label for="file_chat" class="file_label">
                     <i class="fa fa-upload" aria-hidden="true"></i>
-                    Select Chat Photo
+                    Select Photo
                 </label>
                 <input id="file_chat" type="file" name="file">
             </div>
@@ -127,12 +128,13 @@ let ChatPage = {
         document.title = "CoolChat messaging";
 
         //get current user id for loading data and etc.
+        if(firebase.auth().currentUser == null){
+            Router._instance.navigate("/login");
+        }
         const currentUserId = firebase.auth().currentUser.uid;
 
         //cariable for current chat id
         const currentChatId = { id: "" };
-
-        //document.getElementById("stickers-mobile").style.display = "block"
 
         //get current user information
         let currentUserInfo = await database.getUserInfo(currentUserId);
@@ -164,15 +166,11 @@ let ChatPage = {
                     snapshot, 
                     currentChatId, 
                     correspondenceSection,
-                    dociment.querySelector(".container")
+                    document.querySelector(".container")
                 )
             })
 
             firebase.database().ref("/chats/" + snapshot.val() + "/typingUser").on("value", (username) => {
-                console.log(username.val())
-                console.log(currentUserInfo.username)
-                console.log(username.ref.path.pieces_[1])
-                console.log(currentChatId.id)
                 if (username.ref.path.pieces_[1] == currentChatId.id && username.val() != currentUserInfo.username) {
                     if (username.val() != "") {
                         document.getElementById("user-is-typing-indicator").innerText = username.val() + " is typing..."
@@ -189,7 +187,6 @@ let ChatPage = {
         })
 
         //when user press enter, message will be send
-        const textArea = document.querySelector(".text-area")
         userMessageInput.addEventListener("keyup", async function (e) {
             if (e.key !== 'Enter')  {
                 const text = e.target.value.trim()
@@ -198,8 +195,7 @@ let ChatPage = {
                 await firebase.database().ref("/chats/" + chatId + "/typingUser").set(currentUserInfo.username)
 
                 let timer = setTimeout(async () => {
-                    console.log()
-                    if (e.target.value.trim() == text) {
+                    if (e.target.value.trim() == text || e.target.value.trim()=="") {
                         await firebase.database().ref("/chats/" + chatId + "/typingUser").set("")
                     } else {
                         clearTimeout(timer)
@@ -335,7 +331,6 @@ let ChatPage = {
                 chatsContainer.style.display = "block";
             }
             let searchResults = await database.getSearchResults(currentUserId ,val)
-            console.log(searchResults)
             if(searchResults.users.length == 0 && searchResults.chats.length == 0){
                 notFoundText.style.display = "block"
             } else {
@@ -363,6 +358,8 @@ let ChatPage = {
                 e.preventDefault()
                 await database.setChatMessage(currentUserId, currentChatId.id, sticker.src, "sticker")
                 mask.classList.remove("active");
+                createChatModal.style.display = "block"
+                document.querySelector(".stickers-mobile-modal").style.display = "none"
             })
         }
         

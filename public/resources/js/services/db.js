@@ -27,10 +27,11 @@ export class DB {
             photoLink: "resources/img/unknown_user.png",
             chats: []
         });
+        this.loginUser(email, password)
     }
 
     async createChat(usersId, chatName, chatType, chatPassword, chatImgFile) {
-        let imgUrl = "resources/img/person.png"
+        let imgUrl = "resources/img/unknown_user.png"
         if (chatImgFile) {
             const fileId = '_' + Math.random().toString(36).substr(2, 9) + "-id"
             imgUrl = await firebase.storage().ref("/chats").child(fileId).put(chatImgFile.file, chatImgFile.metadata)
@@ -164,13 +165,6 @@ export class DB {
         return null
     }
 
-    newMessageReceived(chatId) {
-        firebase.database().ref("/chats/" + chatId + "/messages").on('child_changed', function(snapshot) {
-
-            console.log(snapshot.name(), snapshot.val());
-        });
-    }
-
     async getUserInfo(userId) {
         const snapshot = await firebase.database().ref("/users/" + userId).once("value");
         if(snapshot.exists()) {
@@ -245,7 +239,6 @@ export class DB {
         
         if (allChats != null) {
             for (const chat of allChats) {
-                console.log(firebase.auth().currentUser.uid)
                 if(chat[chat.id].users !== undefined){
                     if (!chat[chat.id].users.includes(firebase.auth().currentUser.uid) && chat[chat.id].chatType != "dialogue") {
                         chats.push({
@@ -257,16 +250,12 @@ export class DB {
             }
         }
 
-        console.log(allUsersIds)
-        console.log(allUsers)
         for (const id of allUsersIds) {
             if (!userChatsUsers.includes(id) && id != firebase.auth().currentUser.uid) {
-                console.log(id)
                 users.push({
                     user: await this.getUserById(id),
                     id: id
                 })
-                console.log(users)
             }
         }
 

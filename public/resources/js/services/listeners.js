@@ -23,35 +23,16 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
         chatPhoto = newChatInfoVal.chatPhotoLink
     }
 
-    let messages = newChatInfoVal.messages;
     let section = document.createElement("section");
     section.classList.add("chat");
     section.setAttribute.disabled = true;
 
+    section.innerHTML = `
+    <input type="hidden" name="chat-id" value="${newChatInfoKey}">
+    <p class="temp-chat-name">${chatName}</p>
+    <p class="temp-last-message">${newChatInfoVal.chatType + " chat"}</p>
+    <img src="${chatPhoto}" alt="chat-photo" class="chat-photo">`
     
-    if(messages === undefined){
-        section.innerHTML = `
-        <input type="hidden" name="chat-id" value="${newChatInfoKey}">
-        <p class="temp-chat-name">${chatName}</p>
-        <p class="temp-last-message">*No messages*</p>
-        <img src="${chatPhoto}" alt="chat-photo" class="chat-photo">`
-    } else {
-        let userInfo = await database.getUserInfo(messages[messages.length - 1].userId);
-        const lastMessage = messages[messages.length - 1]
-        if(lastMessage.messageType == "text"){
-            section.innerHTML = `
-            <input type="hidden" name="chat-id" value="${newChatInfoKey}">
-            <p class="temp-chat-name">${chatName}</p>
-            <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": " + lastMessage.messageText}</p>
-            <img src="${chatPhoto}" alt="chat-photo" class="chat-photo">`
-        } else {
-            section.innerHTML = `
-            <input type="hidden" name="chat-id" value="${newChatInfoKey}">
-            <p class="temp-chat-name">${chatName}</p>
-            <p class="temp-last-message">${userInfo.name + " " + userInfo.surname + ": *sticker*"}</p>
-            <img src="${chatPhoto}" alt="chat-photo" class="chat-photo">`
-        }
-    }
     section.addEventListener('click', async (event) => {
         //filling chat info section
         event.preventDefault();
@@ -83,10 +64,14 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
                 stickersModal.style.display = "block"
             })
             document.querySelector(".close").addEventListener("click", function(e){
+                document.querySelector(".create-chat-modal").style.display = "block"
+                stickersModal.style.display = "none"
                 mask.classList.remove("active");
             })
             mask.addEventListener("click", function (e) {
                 mask.classList.remove("active");
+                document.querySelector(".create-chat-modal").style.display = "block"
+                stickersModal.style.display = "none"
             })
 
             backToChatMobile.addEventListener("click", function(e){
@@ -130,7 +115,8 @@ export async function handleNewChat(snapshot, chatInfoSection, correspondenceSec
                     messages[i].messageText, 
                     correspondenceSection,
                     userInfo,
-                    messages[i].messageType
+                    messages[i].messageType,
+                    document.querySelector(".container")
                 )
             }
         }
@@ -150,7 +136,8 @@ export async function handleNewMessage(snapshot, currentChatId, correspondenceSe
             snapshot.val().messageText,
             correspondenceSection,
             userInfo,
-            snapshot.val().messageType
+            snapshot.val().messageType,
+            document.querySelector(".container")
         )
     }
 }

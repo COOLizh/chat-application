@@ -1,6 +1,4 @@
 import Utils from "./services/Utils.js";
-// import Header from "./views/components/header.js";
-//import Error404 from "./views/pages/Error404.js";
 
 
 export class Router {
@@ -11,7 +9,6 @@ export class Router {
     constructor(routes) {
         this.routes = routes;
         window.addEventListener('popstate', event => this._onPopState(event));
-
     }
 
     _onPopState(){
@@ -26,23 +23,11 @@ export class Router {
         if (Router._instance != null) {
             return Router._instance;
         }
-
-        const path = window.location.pathname;
-        window.history.replaceState({path}, path, path);
         const router = new Router(routes);
         Router._instance = router;
         router._loadInitial();
-        // firebase.auth().onAuthStateChanged(function(user) {
-        //     router.render_header()
-        // });
         return router;
     }
-
-    // async render_header(){
-    //     const header = null || document.getElementById('header_container');
-    //     header.innerHTML = await Header.render();
-    //     await Header.after_render(this.parseCurrentURL());
-    // }
 
     navigate(url) {
 
@@ -57,25 +42,12 @@ export class Router {
     }
 
     async loadPage(url){
-        // console.log("pizda")
         const content = null || document.getElementById('app');
-        // const header = null || document.getElementById('header_container');
-        // header.innerHTML = await Header.render();
-        // await Header.after_render(url);
-
-        // this.currentPage = Error404
         for (const { path, page} of Router._instance.routes) {
-            // console.log(page)
-            // console.log(path)
             if (path === url){
                 this.currentPage = page;
-                // console.log(path)
-                // console.log(url)
-                // console.log(this.currentPage)
             }
         }
-        // let ttt = await this.currentPage.render()
-        // console.log(ttt)
         content.innerHTML = await this.currentPage.render();
         await this.currentPage.after_render();
     }

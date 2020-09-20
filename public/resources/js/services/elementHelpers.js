@@ -17,14 +17,8 @@ export function displayUserMessage(userId, message, correspondenceSection, userI
     userMessageSection.classList.add("user-message")
     if(userId == firebase.auth().currentUser.uid) {
         userMessageSection.classList.add("current");
-        const messageStatus = document.createElement("span")
-        messageStatus.classList.add("message-status")
-        messageStatus.innerText = "✔"
-        userMessageSection.appendChild(userMessage);
-        userMessageSection.appendChild(messageStatus);
-    } else {
-        userMessageSection.appendChild(userMessage);
     }
+    userMessageSection.appendChild(userMessage);
     correspondenceSection.appendChild(userMessageSection);
     container.scrollTop = container.scrollHeight;
 }
@@ -105,8 +99,6 @@ export function displaySearchResults(searchResults, usersSearchDiv, chatsSearchD
 
                         searchDiv.style.display = "none";
                         chatsContainer.style.display = "block";
-
-                        //очистить инпут
 
                         mask.classList.remove("active");
                         createChatModal.style.display = "block"

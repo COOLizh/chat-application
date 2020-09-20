@@ -22,18 +22,19 @@ let RegistrationPage = {
         let registrationButton = document.getElementById("registration-button")
         registrationButton.addEventListener("click", (event) => {
             event.preventDefault()
-            let name = document.getElementById("name").value
-            let surname = document.getElementById("surname").value
-            let username = document.getElementById("username").value
-            let email = document.getElementById("email").value
+            let name = document.getElementById("name").value.trim()
+            let surname = document.getElementById("surname").value.trim()
+            let username = document.getElementById("username").value.trim()
+            let email = document.getElementById("email").value.trim()
             let password = document.getElementById("password").value
             let confirmPassword = document.getElementById("confirm-password").value
+            console.log(name, surname, username, email, password, confirmPassword)
             if (password != confirmPassword){
                 alert("Passsword != confirm password");
+            } else if(surname == "" || name == "" || username == "" || password == ""){
+                alert("All inputs must be filled")
             } else {
-                // let database = new DB();
-                database.createUser(name, surname, username, email, password);
-                alert("Succesfully registered")
+                database.createUser(name, surname, username, email, password)
             }
         }) 
     }

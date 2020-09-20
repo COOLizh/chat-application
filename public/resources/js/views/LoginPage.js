@@ -12,7 +12,6 @@ let LoginPage = {
             <input type="text" name="email" placeholder="Email" id="email" required>
             <input type="password" name="password" placeholder="Password" id="password" required>
             <input type="submit" value="Sign in" id="sign-in-button">
-            <p id="forgot-password-button"><a href="google.com">Forgot your password?</a></p>
         </div>
     </div>`
         return view
@@ -26,7 +25,6 @@ let LoginPage = {
             event.preventDefault()
             let email = document.getElementById("email").value;
             let password = document.getElementById("password").value;
-            // let database = new DB();
             database.loginUser(email, password);
         })
     }
