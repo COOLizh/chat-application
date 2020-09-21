@@ -15,4 +15,4 @@
 
 [The link to view the layout of the site](https://www.figma.com/file/wRvtHfljokwk0MQXOYBdSl/Desktop-chat?node-id=44%3A0)
 
-[Site pages](https://coolchat-6f45c.web.app/resources/index.html)
+[Site](https://coolchat-6f45c.web.app/)
